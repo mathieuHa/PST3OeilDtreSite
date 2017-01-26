@@ -1,0 +1,22 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Oeil DTRE - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% block bundle_body %}
+    {% endblock %}
+    {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="well">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {% block bundle_javascript %}
+    {% endblock %}
+{% endblock javascript %}
