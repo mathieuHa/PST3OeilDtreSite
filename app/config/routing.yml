@@ -1,0 +1,7 @@
+dtre_oeil_site:
+    resource: "@DTREOeilSiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
