@@ -7,10 +7,51 @@
 {% block bundle_body %}
     <h2>Accueil</h2>
     <hr>
+    <div class="row">
+            <div id="chart">ok</div>
+    </div>
+    <div></div>
 {% endblock %}
 
 {% block bundle_javascript %}
 
     <script type="text/javascript">
+
+        google.charts.load('current', {packages: ['corechart']});
+
+        var dat;
+        $.getJSON("http://localhost/oeildtrepst3/web/app_dev.php/sensors/day", function(result){
+            dat = result;
+            google.charts.setOnLoadCallback(drawChart);
+            $.each(result, function(i, field){
+                //console.log(field["value"]);
+            });
+        });
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Mushrooms', 3],
+                ['Onions', 1],
+                ['Olives', 1],
+                ['Zucchini', 1],
+                ['Pepperoni', 2]
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'How Much Pizza I Ate Last Night',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart'));
+            chart.draw(data, options);
+            $.each(dat, function(i, field){
+                console.log(field["value"]);
+            });
+        }
     </script>
 {% endblock %}
