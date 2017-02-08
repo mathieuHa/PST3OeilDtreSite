@@ -8,7 +8,10 @@
     <h2>Accueil</h2>
     <hr>
     <div class="row">
-            <div id="chart">ok</div>
+            <div id="chart1">ok</div>
+            <div id="chart2">ok</div>
+            <div id="chart3">ok</div>
+            <div id="chart4">ok</div>
     </div>
     <div></div>
 {% endblock %}
@@ -16,30 +19,26 @@
 {% block bundle_javascript %}
 
     <script type="text/javascript">
-
+        // initialisation de l'api google pour les graphiques linéaires
         google.charts.load('current', {'packages':['line']});
 
-        var dat;
-        $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/1/data/day", function(result){
-            dat = result;
-            google.charts.setOnLoadCallback(drawChart);
-            $.each(result, function(i, field){
-                //console.log(field["value"]);
+        function getDayData(i, ch, d) {
+            $.getJSON("http://localhost/oeildtrepst3/web/app_dev.php/sensors/"+i+"/data/day", function(result){
+                d = result;
+                google.charts.setOnLoadCallback(drawDayChart(ch,d));
             });
-        });
-        function drawChart() {
+        }
+        function drawDayChart(ch,d) {
             var data = new google.visualization.DataTable();
             data.addColumn('date', 'Day');
             data.addColumn('number', 'Température');
 
-            $.each(dat, function(i, field){
+            $.each(d, function(i, field){
                 console.log(field["value"]);
                 console.log(field["date"]);
                 data.addRow([new Date(field["date"]),field["value"]]);
             });
 
-
-            // Set chart options
             var options = {
                 chart: {
                     title: 'Température dans la DTRE',
@@ -50,13 +49,19 @@
             };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart = new google.charts.Line(document.getElementById('chart'));
+            var chart = new google.charts.Line(document.getElementById(ch));
             chart.draw(data, options);
-            $.each(dat, function(i, field){
-                console.log(field["value"]);
-                console.log(new Date(field["date"]));
-                console.log(field["date"]);
-            });
         }
+        var daydata1;
+        var daydata2;
+        var daydata3;
+        var daydata4;
+
+        getDayData(17,"chart1",daydata1);
+        getDayData(18,"chart2",daydata2);
+        getDayData(19,"chart3",daydata3);
+        getDayData(20,"chart4",daydata4);
+
+
     </script>
 {% endblock %}
