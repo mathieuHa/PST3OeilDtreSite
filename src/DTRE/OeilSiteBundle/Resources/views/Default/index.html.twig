@@ -8,10 +8,10 @@
     <h2>Accueil</h2>
     <hr>
     <div class="row">
-            <div id="chart1">ok</div>
-            <div id="chart2">ok</div>
-            <div id="chart3">ok</div>
-            <div id="chart4">ok</div>
+            <div id="chart1"  class="col-md-6">ok</div>
+            <div id="chart2"  class="col-md-6">ok</div>
+            <div id="chart3"  class="col-md-6">ok</div>
+            <div id="chart4"  class="col-md-6">ok</div>
     </div>
     <div></div>
 {% endblock %}
@@ -44,8 +44,8 @@
                     title: 'Température dans la DTRE',
                     subtitle: 'en degré Celsius'
                 },
-                width: 900,
-                height: 500
+                'width':400,
+                'height':300
             };
 
             // Instantiate and draw our chart, passing in some options.
@@ -56,11 +56,11 @@
         var daydata2;
         var daydata3;
         var daydata4;
+                getDayData(17,"chart1",daydata1);
+                getDayData(18,"chart2",daydata2);
+                getDayData(19,"chart3",daydata3);
+                getDayData(20,"chart4",daydata4);
 
-        getDayData(17,"chart1",daydata1);
-        getDayData(18,"chart2",daydata2);
-        getDayData(19,"chart3",daydata3);
-        getDayData(20,"chart4",daydata4);
 
 
     </script>
