@@ -8,10 +8,10 @@
     <h2>Accueil</h2>
     <hr>
     <div class="row">
-            <div id="chart1"  class="col-md-6">ok</div>
-            <div id="chart2"  class="col-md-6">ok</div>
-            <div id="chart3"  class="col-md-6">ok</div>
-            <div id="chart4"  class="col-md-6">ok</div>
+            <div id="chart1"  class="col-md-6"><div class="well" style=""></div></div>
+            <div id="chart2"  class="col-md-6"></div>
+            <div id="chart3"  class="col-md-6"></div>
+            <div id="chart4"  class="col-md-6"></div>
     </div>
     <div></div>
 {% endblock %}
@@ -21,6 +21,8 @@
     <script type="text/javascript">
         // initialisation de l'api google pour les graphiques linéaires
         google.charts.load('current', {'packages':['line']});
+        google.charts.load('current', {'packages':['corechart']});
+
         function getDayData(i, ch, d) {
             $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+i+"/data/day", function(result){
                 d = result;
@@ -29,31 +31,40 @@
         }
         function drawDayChart(ch,d) {
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Day');
+            data.addColumn('date', 'Journée');
             data.addColumn('number', 'Température');
             $.each(d, function(i, field){
                 data.addRow([new Date(field["date"]),field["value"]]);
             });
+
+            /*var dateFormatter = new google.visualization.DateFormat({pattern: 'HH:mm'});
+            dateFormatter.format(data, 0);*/
             var options = {
-                chart: {
-                    title: 'Température dans la DTRE',
-                    subtitle: 'en degré Celsius',
-                    legend: { position: 'bottom' }
-                },
-                'width':580,
-                'height':400
+                title: 'Température dans la DTRE',
+                subtitle: 'en degré Celsius',
+                'width':570,
+                'height':400,
+                legend: { position: 'right' },
+                hAxis: {
+                    format: 'HH:mm'
+                    /*viewWindow: {
+                        min: new Date(2015, 0, 1),
+                        max
+                    }*/
+                }
+
             };
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.charts.Line(document.getElementById(ch));
-            chart.draw(data, options);
+            chart.draw(data, google.charts.Line.convertOptions(options));
         }
         var daydata1;
         var daydata2;
         var daydata3;
         var daydata4;
-        getDayData(17,"chart1",daydata1);
-        getDayData(18,"chart2",daydata2);
-        getDayData(19,"chart3",daydata3);
-        getDayData(20,"chart4",daydata4);
+        getDayData(4,"chart1",daydata1);
+        getDayData(5,"chart2",daydata2);
+        getDayData(6,"chart3",daydata3);
+        getDayData(7,"chart4",daydata4);
     </script>
 {% endblock %}
