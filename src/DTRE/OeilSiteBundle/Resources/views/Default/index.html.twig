@@ -23,10 +23,40 @@
         google.charts.load('current', {'packages':['line']});
         google.charts.load('current', {'packages':['corechart']});
 
+        function Sensor(id, name, title, subtitle, location, data) {
+            this.id = id;
+            this.name = name;
+            this.title = title;
+            this.subtitle = subtitle;
+            this.location = location;
+            this.data = data;
+        }
+
+        var sensors = [];
+        
+        function getSensorInformation() {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors", function(result){
+                console.log(result);
+                $.each(result, function(i, field){
+                    sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+i, null));
+                });
+                for (var j = 0; j < sensors.length; j++) {
+                    getWeekData(sensors[j]);
+                }
+            });
+
+        }
+
         function getDayData(i, ch, d) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+i+"/data/day", function(result){
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+i+"/data/day", function(result){
                 d = result;
                 google.charts.setOnLoadCallback(drawDayChart(ch,d));
+            });
+        }
+        function getWeekData(sensor) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+i+"/dailydata/week", function(result){
+                d = result;
+                google.charts.setOnLoadCallback(drawWeekChart(ch,d));
             });
         }
         function drawDayChart(ch,d) {
@@ -47,24 +77,50 @@
                 legend: { position: 'right' },
                 hAxis: {
                     format: 'HH:mm'
-                    /*viewWindow: {
-                        min: new Date(2015, 0, 1),
-                        max
-                    }*/
                 }
-
             };
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.charts.Line(document.getElementById(ch));
             chart.draw(data, google.charts.Line.convertOptions(options));
         }
-        var daydata1;
-        var daydata2;
-        var daydata3;
-        var daydata4;
-        getDayData(4,"chart1",daydata1);
-        getDayData(5,"chart2",daydata2);
-        getDayData(6,"chart3",daydata3);
-        getDayData(7,"chart4",daydata4);
+        function drawWeekChart(ch,d) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Semaine');
+            data.addColumn('number', 'Température moyenne');
+            data.addColumn('number', 'Température minimum');
+            data.addColumn('number', 'Température maximum');
+            $.each(d, function(i, field){
+                data.addRow([new Date(field["date"]),field["value"],field["min"],field["max"]]);
+            });
+
+            /*var dateFormatter = new google.visualization.DateFormat({pattern: 'HH:mm'});
+             dateFormatter.format(data, 0);*/
+            var options = {
+                title: 'Température dans la DTRE',
+                subtitle: 'en degré Celsius',
+                'width':570,
+                'height':400,
+                legend: { position: 'right' },
+                /*hAxis: {
+                    format: 'dd MMM'
+                }*/
+            };
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.charts.Line(document.getElementById(ch));
+            chart.draw(data, google.charts.Line.convertOptions(options));
+        }
+        var data1;
+        var data2;
+        var data3;
+        var data4;/*
+        getDayData(8,"chart1",data1);
+        getDayData(5,"chart2",data2);
+        getDayData(6,"chart3",data3);
+        getDayData(7,"chart4",data4);*/
+        getSensorInformation();
+        /*getWeekData(8,"chart1",data1);
+        getWeekData(5,"chart2",data2);
+        getWeekData(6,"chart3",data3);
+        getWeekData(7,"chart4",data4);*/
     </script>
 {% endblock %}
