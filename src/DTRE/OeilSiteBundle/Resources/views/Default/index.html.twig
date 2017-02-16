@@ -42,37 +42,53 @@
                 });
                 console.log(sensors);
                 for (var j = 0; j < sensors.length; j++) {
-                    getWeekData(sensors[j]);
+                    getYearData(sensors[j]);
                 }
             });
 
         }
 
-        function getDayData(i, ch, d) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+i+"/data/day", function(result){
-                d = result;
-                google.charts.setOnLoadCallback(drawDayChart(ch,d));
+        function getDayData(sensor) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/data/day", function(result){
+                sensor.data = result;
+                google.charts.setOnLoadCallback(drawDayChart(sensor));
             });
         }
         function getWeekData(sensor) {
             $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/week", function(result){
                 sensor.data = result;
-                google.charts.setOnLoadCallback(drawWeekChart(sensor.location,sensor.data));
+                google.charts.setOnLoadCallback(drawLongChart(sensor));
             });
         }
-        function drawDayChart(ch,d) {
+        function getMonthData(sensor) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/month", function(result){
+                sensor.data = result;
+                google.charts.setOnLoadCallback(drawLongChart(sensor));
+            });
+        }
+        function getSemesterData(sensor) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/semester", function(result){
+                sensor.data = result;
+                google.charts.setOnLoadCallback(drawLongChart(sensor));
+            });
+        }
+        function getYearData(sensor) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/year", function(result){
+                sensor.data = result;
+                google.charts.setOnLoadCallback(drawLongChart(sensor));
+            });
+        }
+        function drawDayChart(sensor) {
             var data = new google.visualization.DataTable();
             data.addColumn('date', 'Journée');
             data.addColumn('number', 'Température');
-            $.each(d, function(i, field){
+            $.each(sensor.data, function(i, field){
                 data.addRow([new Date(field["date"]),field["value"]]);
             });
 
-            /*var dateFormatter = new google.visualization.DateFormat({pattern: 'HH:mm'});
-            dateFormatter.format(data, 0);*/
             var options = {
-                title: 'Température dans la DTRE',
-                subtitle: 'en degré Celsius',
+                title: sensor.title,
+                subtitle: sensor.subtitle,
                 'width':570,
                 'height':400,
                 legend: { position: 'right' },
@@ -80,48 +96,57 @@
                     format: 'HH:mm'
                 }
             };
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.charts.Line(document.getElementById(ch));
+            var chart = new google.charts.Line(document.getElementById(sensor.location));
             chart.draw(data, google.charts.Line.convertOptions(options));
         }
-        function drawWeekChart(ch,d) {
+        function drawLongChart(sensor) {
             var data = new google.visualization.DataTable();
             data.addColumn('date', 'Semaine');
-            data.addColumn('number', 'Température moyenne');
-            data.addColumn('number', 'Température minimum');
-            data.addColumn('number', 'Température maximum');
-            $.each(d, function(i, field){
+            data.addColumn('number', sensor.name + ' moyen(ne)');
+            data.addColumn('number', sensor.name + ' minimum');
+            data.addColumn('number', sensor.name + ' maximum');
+            $.each(sensor.data, function(i, field){
                 data.addRow([new Date(field["date"]),field["value"],field["min"],field["max"]]);
             });
 
-            /*var dateFormatter = new google.visualization.DateFormat({pattern: 'HH:mm'});
-             dateFormatter.format(data, 0);*/
             var options = {
-                title: 'Température dans la DTRE',
-                subtitle: 'en degré Celsius',
+                title: sensor.title,
+                subtitle: sensor.subtitle,
                 'width':570,
                 'height':400,
-                legend: { position: 'right' },
+                legend: { position: 'right' }
                 /*hAxis: {
                     format: 'dd MMM'
                 }*/
             };
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.charts.Line(document.getElementById(ch));
+            var chart = new google.charts.Line(document.getElementById(sensor.location));
             chart.draw(data, google.charts.Line.convertOptions(options));
         }
-        var data1;
-        var data2;
-        var data3;
-        var data4;/*
-        getDayData(8,"chart1",data1);
-        getDayData(5,"chart2",data2);
-        getDayData(6,"chart3",data3);
-        getDayData(7,"chart4",data4);*/
+
+        function drawChart(sensor) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Semaine');
+            data.addColumn('number', sensor.name + ' moyen(ne)');
+            data.addColumn('number', sensor.name + ' minimum');
+            data.addColumn('number', sensor.name + ' maximum');
+            $.each(sensor.data, function(i, field){
+                data.addRow([new Date(field["date"]),field["value"],field["min"],field["max"]]);
+            });
+
+            var options = {
+                title: sensor.title,
+                subtitle: sensor.subtitle,
+                'width':570,
+                'height':400,
+                legend: { position: 'right' }
+                /*hAxis: {
+                 format: 'dd MMM'
+                 }*/
+            };
+            var chart = new google.charts.Line(document.getElementById(sensor.location));
+            chart.draw(data, google.charts.Line.convertOptions(options));
+        }
+
         getSensorInformation();
-        /*getWeekData(8,"chart1",data1);
-        getWeekData(5,"chart2",data2);
-        getWeekData(6,"chart3",data3);
-        getWeekData(7,"chart4",data4);*/
     </script>
 {% endblock %}
