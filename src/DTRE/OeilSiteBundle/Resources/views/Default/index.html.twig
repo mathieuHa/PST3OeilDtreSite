@@ -38,8 +38,9 @@
             $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors", function(result){
                 console.log(result);
                 $.each(result, function(i, field){
-                    sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+i, null));
+                    sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
                 });
+                console.log(sensors);
                 for (var j = 0; j < sensors.length; j++) {
                     getWeekData(sensors[j]);
                 }
@@ -54,9 +55,9 @@
             });
         }
         function getWeekData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+i+"/dailydata/week", function(result){
-                d = result;
-                google.charts.setOnLoadCallback(drawWeekChart(ch,d));
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/week", function(result){
+                sensor.data = result;
+                google.charts.setOnLoadCallback(drawWeekChart(sensor.location,sensor.data));
             });
         }
         function drawDayChart(ch,d) {
