@@ -7,11 +7,29 @@
 {% block bundle_body %}
     <h2>Accueil</h2>
     <hr>
+    <div class="datepicker"></div>
+
     <div class="row">
-            <div id="chart1"  class="col-md-6"><div class="well" style=""></div></div>
-            <div id="chart2"  class="col-md-6"></div>
-            <div id="chart3"  class="col-md-6"></div>
-            <div id="chart4"  class="col-md-6"></div>
+            <div class="col-md-6 well">
+                <div style="width:95%; height:400px">
+                    <div id="chart1"></div>
+                </div>
+            </div>
+            <div class="col-md-6 well">
+                <div style="width:95%; height:400px">
+                    <div id="chart2"></div>
+                </div>
+            </div>
+            <div class="col-md-6 well">
+                <div style="width:95%; height:400px">
+                    <div id="chart3"></div>
+                </div>
+            </div>
+            <div class="col-md-6 well">
+                <div style="width:95%; height:400px">
+                    <div id="chart4"></div>
+                </div>
+            </div>
     </div>
     <div></div>
 {% endblock %}
@@ -19,9 +37,20 @@
 {% block bundle_javascript %}
 
     <script type="text/javascript">
+        $(document).ready(function(){
+
         // initialisation de l'api google pour les graphiques linéaires
-        google.charts.load('current', {'packages':['line']});
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {'packages':['line'], 'language': 'fr'});
+        google.charts.load('current', {'packages':['corechart'], 'language': 'fr'});
+
+        $('.datepicker').datepicker({
+            format: 'mm/dd/yyyy',
+            startDate: '-3d'
+        });
+
+
+            
+
 
         function Sensor(id, name, title, subtitle, location, data) {
             this.id = id;
@@ -42,7 +71,7 @@
                 });
                 console.log(sensors);
                 for (var j = 0; j < sensors.length; j++) {
-                    getYearData(sensors[j]);
+                    getDayData(sensors[j]);
                 }
             });
 
@@ -147,6 +176,39 @@
             chart.draw(data, google.charts.Line.convertOptions(options));
         }
 
+
+        $("#day").on("click", function () {
+            for (var j = 0; j < sensors.length; j++) {
+                getDayData(sensors[j]);
+            }
+        });
+        $("#week").on("click", function () {
+            for (var j = 0; j < sensors.length; j++) {
+                getWeekData(sensors[j]);
+            }
+        });
+        $("#month").on("click", function () {
+            for (var j = 0; j < sensors.length; j++) {
+                getMonthData(sensors[j]);
+            }
+        });
+        $("#semester").on("click", function () {
+            for (var j = 0; j < sensors.length; j++) {
+                getSemesterData(sensors[j]);
+            }
+        });
+        $("#year").on("click", function () {
+            for (var j = 0; j < sensors.length; j++) {
+                getYearData(sensors[j]);
+            }
+        });
+
+        $(".desactiver").on("click", function () {
+            $(".desactiver").removeClass("active");
+            $(this).addClass("active");
+        });
+
         getSensorInformation();
+        });
     </script>
 {% endblock %}
