@@ -10,10 +10,30 @@
 
     <div class="container">
         <div class="row">
-            <div class='col-md-3 col-md-offset-3 '>
+            <div class='col-md-3'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker1'>
                         <input type='text' id="date" class="form-control" />
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-3 '>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' id="date2" class="form-control" />
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-3 '>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker3'>
+                        <input type='text' id="date3" class="form-control" />
                         <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -63,8 +83,6 @@
         $('#button-date').on("click", function () {
             console.log($('#date').val());
         });
-
-
         
 
         function Time(year, month, day) {
@@ -95,6 +113,8 @@
                 });
                 console.log(sensors);
                 setDatePickerDay();
+                setDatePickerMonth();
+                setDatePickerYear();
                 for (var j = 0; j < sensors.length; j++) {
                     getDayData(sensors[j], time);
                 }
@@ -262,7 +282,7 @@
         }
 
         function setDatePickerMonth() {
-            $('#datetimepicker1').datetimepicker({
+            $('#datetimepicker2').datetimepicker({
                 format: 'MM/YYYY',
                 useCurrent: true,
                 defaultDate: new Date()
@@ -270,10 +290,12 @@
         }
 
         function setDatePickerYear() {
-            $('#datetimepicker1').data().destroy();
+            $('#datetimepicker3').datetimepicker({
+                format: 'YYYY',
+                useCurrent: true,
+                defaultDate: new Date()
+            });
         }
-
-
             getSensorInformation();
         });
     </script>
