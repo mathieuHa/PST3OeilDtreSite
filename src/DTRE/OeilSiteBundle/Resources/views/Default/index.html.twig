@@ -7,7 +7,24 @@
 {% block bundle_body %}
     <h2>Accueil</h2>
     <hr>
-    <div class="datepicker"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class='col-md-3 col-md-offset-3 '>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' id="date" class="form-control" />
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="button" id="button-date" class="btn btn-primary btn-block">Valider</button>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
             <div class="col-md-6 well">
@@ -35,7 +52,7 @@
 {% endblock %}
 
 {% block bundle_javascript %}
-
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
 
@@ -43,14 +60,18 @@
         google.charts.load('current', {'packages':['line'], 'language': 'fr'});
         google.charts.load('current', {'packages':['corechart'], 'language': 'fr'});
 
-        $('.datepicker').datepicker({
-            format: 'mm/dd/yyyy',
-            startDate: '-3d'
+        $('#button-date').on("click", function () {
+            console.log($('#date').val());
         });
 
 
-            
+        
 
+        function Time(year, month, day) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+        }
 
         function Sensor(id, name, title, subtitle, location, data) {
             this.id = id;
@@ -62,7 +83,10 @@
         }
 
         var sensors = [];
-        
+        now = new Date();
+        var time = new Time (now.getUTCFullYear(), now.getUTCMonth()+1, now.getUTCDate());
+        console.log(time);
+
         function getSensorInformation() {
             $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors", function(result){
                 console.log(result);
@@ -70,39 +94,55 @@
                     sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
                 });
                 console.log(sensors);
+                setDatePickerDay();
                 for (var j = 0; j < sensors.length; j++) {
-                    getDayData(sensors[j]);
+                    getDayData(sensors[j], time);
                 }
             });
-
         }
 
-        function getDayData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/data/day", function(result){
+        function getDayData(sensor, time) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/" +sensor.id+ "/data/day" +
+                        "?day="+ time.day +
+                        "&month="+ time.month +
+                        "&year="+ time.year
+                        , function(result){
                 sensor.data = result;
                 google.charts.setOnLoadCallback(drawDayChart(sensor));
             });
         }
-        function getWeekData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/week", function(result){
+        function getWeekData(sensor, time) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/week" +
+                "?day="+ time.day +
+                "&month="+ time.month +
+                "&year="+ time.year
+                , function(result){
                 sensor.data = result;
                 google.charts.setOnLoadCallback(drawLongChart(sensor));
             });
         }
-        function getMonthData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/month", function(result){
+        function getMonthData(sensor, time) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/month" +
+                "?month="+ time.month +
+                "&year="+ time.year
+                , function(result){
                 sensor.data = result;
                 google.charts.setOnLoadCallback(drawLongChart(sensor));
             });
         }
-        function getSemesterData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/semester", function(result){
+        function getSemesterData(sensor, time) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/semester" +
+                "?month="+ time.month +
+                "&year="+ time.year
+                , function(result){
                 sensor.data = result;
                 google.charts.setOnLoadCallback(drawLongChart(sensor));
             });
         }
-        function getYearData(sensor) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/year", function(result){
+        function getYearData(sensor, time) {
+            $.getJSON("http://localhost/pst3oeildtre/web/app_dev.php/sensors/"+sensor.id+"/dailydata/year" +
+                "?year="+ time.year
+                , function(result){
                 sensor.data = result;
                 google.charts.setOnLoadCallback(drawLongChart(sensor));
             });
@@ -178,28 +218,33 @@
 
 
         $("#day").on("click", function () {
+            setDatePickerDay();
             for (var j = 0; j < sensors.length; j++) {
-                getDayData(sensors[j]);
+                getDayData(sensors[j], time);
             }
         });
         $("#week").on("click", function () {
+            setDatePickerDay();
             for (var j = 0; j < sensors.length; j++) {
-                getWeekData(sensors[j]);
+                getWeekData(sensors[j], time);
             }
         });
         $("#month").on("click", function () {
+            setDatePickerMonth();
             for (var j = 0; j < sensors.length; j++) {
-                getMonthData(sensors[j]);
+                getMonthData(sensors[j], time);
             }
         });
         $("#semester").on("click", function () {
+            setDatePickerMonth();
             for (var j = 0; j < sensors.length; j++) {
-                getSemesterData(sensors[j]);
+                getSemesterData(sensors[j], time);
             }
         });
         $("#year").on("click", function () {
+            setDatePickerYear();
             for (var j = 0; j < sensors.length; j++) {
-                getYearData(sensors[j]);
+                getYearData(sensors[j], time);
             }
         });
 
@@ -208,7 +253,28 @@
             $(this).addClass("active");
         });
 
-        getSensorInformation();
+        function setDatePickerDay() {
+            $('#datetimepicker1').datetimepicker({
+                format: 'DD/MM/YYYY',
+                useCurrent: true,
+                defaultDate: new Date()
+            });
+        }
+
+        function setDatePickerMonth() {
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/YYYY',
+                useCurrent: true,
+                defaultDate: new Date()
+            });
+        }
+
+        function setDatePickerYear() {
+            $('#datetimepicker1').data().destroy();
+        }
+
+
+            getSensorInformation();
         });
     </script>
 {% endblock %}
