@@ -84,15 +84,32 @@
 
         $('#button-date').on("click", function () {
             console.log($('#date').val());
-            if (select=="day" || select=="week"){
-                str = $('#date').val().split("/");
-                time = new Time(str.pop(),str.pop(),str.pop());
-            } else if (select=="month" || select=="semester"){
-                str = $('#date2').val().split("/");
-                time = new Time(str.pop(),str.pop(),0);
-            } else {
-                str = $('#date3').val().split("/");
-                time = new Time(str.pop(),0,0);
+            switch (select){
+                case "day":
+                    str = $('#date').val().split("/");
+                    time = new Time(str.pop(),str.pop(),str.pop());
+                    handleDay();
+                    break;
+                case "week":
+                    str = $('#date').val().split("/");
+                    time = new Time(str.pop(),str.pop(),str.pop());
+                    handleWeek();
+                    break;
+                case "month":
+                    str = $('#date2').val().split("/");
+                    time = new Time(str.pop(),str.pop(),0);
+                    handleMonth();
+                    break;
+                case "semester":
+                    str = $('#date2').val().split("/");
+                    time = new Time(str.pop(),str.pop(),0);
+                    handleSemester();
+                    break;
+                case "year":
+                    str = $('#date3').val().split("/");
+                    time = new Time(str.pop(),0,0);
+                    handleYear();
+                    break;
             }
 
             console.log(time);
@@ -132,9 +149,7 @@
                 setDatePickerMonth();
                 setDatePickerYear();
                 select = "day";
-                for (var j = 0; j < sensors.length; j++) {
-                    getDayData(sensors[j], time);
-                }
+                handleDay();
             });
         }
 
@@ -258,37 +273,27 @@
         $("#day").on("click", function () {
             select = "day";
             setDatePickerDay();
-            for (var j = 0; j < sensors.length; j++) {
-                getDayData(sensors[j], time);
-            }
+            handleDay();
         });
         $("#week").on("click", function () {
             select = "week";
             setDatePickerDay();
-            for (var j = 0; j < sensors.length; j++) {
-                getWeekData(sensors[j], time);
-            }
+            handleWeek();
         });
         $("#month").on("click", function () {
             select = "month";
             setDatePickerMonth();
-            for (var j = 0; j < sensors.length; j++) {
-                getMonthData(sensors[j], time);
-            }
+            handleMonth();
         });
         $("#semester").on("click", function () {
             select = "semester";
             setDatePickerMonth();
-            for (var j = 0; j < sensors.length; j++) {
-                getSemesterData(sensors[j], time);
-            }
+            handleSemester();
         });
         $("#year").on("click", function () {
             select = "year";
             setDatePickerYear();
-            for (var j = 0; j < sensors.length; j++) {
-                getYearData(sensors[j], time);
-            }
+            handleYear();
         });
 
         $(".desactiver").on("click", function () {
@@ -319,6 +324,37 @@
                 defaultDate: new Date()
             });
         }
+
+        function handleYear() {
+            for (var j = 0; j < sensors.length; j++) {
+                getYearData(sensors[j], time);
+            }
+        }
+
+        function handleMonth() {
+            for (var j = 0; j < sensors.length; j++) {
+                getMonthData(sensors[j], time);
+            }
+        }
+
+        function handleSemester() {
+            for (var j = 0; j < sensors.length; j++) {
+                getSemesterData(sensors[j], time);
+            }
+        }
+        
+        function handleWeek() {
+            for (var j = 0; j < sensors.length; j++) {
+                getWeekData(sensors[j], time);
+            }
+        }
+        
+        function handleDay() {
+            for (var j = 0; j < sensors.length; j++) {
+                getDayData(sensors[j], time);
+            }
+        }
+
             getSensorInformation();
         });
     </script>
