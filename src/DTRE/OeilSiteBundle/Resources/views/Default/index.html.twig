@@ -142,7 +142,7 @@
         console.log(time);
 
         function getSensorInformation() {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors", function(result){
+            $.getJSON("/pst3oeildtre/web/app.php/sensors", function(result){
                 console.log(result);
                 $.each(result, function(i, field){
                     sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
@@ -158,7 +158,7 @@
 
         function getDayData(sensor, time) {
             console.log(time);
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/" +sensor.id+ "/data/day" +
+            $.getJSON("/pst3oeildtre/web/app.php/sensors/" +sensor.id+ "/data/day" +
                         "?day="+ time.day +
                         "&month="+ time.month +
                         "&year="+ time.year
@@ -173,7 +173,7 @@
             });
         }
         function getWeekData(sensor, time) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/week" +
+            $.getJSON("/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/week" +
                 "?day="+ time.day +
                 "&month="+ time.month +
                 "&year="+ time.year
@@ -187,7 +187,7 @@
             });
         }
         function getMonthData(sensor, time) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/month" +
+            $.getJSON("/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/month" +
                 "?month="+ time.month +
                 "&year="+ time.year
                 , function(result){
@@ -200,7 +200,7 @@
             });
         }
         function getSemesterData(sensor, time) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/semester" +
+            $.getJSON("/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/semester" +
                 "?month="+ time.month +
                 "&year="+ time.year
                 , function(result){
@@ -213,7 +213,7 @@
             });
         }
         function getYearData(sensor, time) {
-            $.getJSON("http://localhost/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/year" +
+            $.getJSON("/pst3oeildtre/web/app.php/sensors/"+sensor.id+"/dailydata/year" +
                 "?year="+ time.year
                 , function(result){
                 sensor.data = result;
