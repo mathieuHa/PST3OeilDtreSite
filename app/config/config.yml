@@ -92,3 +92,15 @@ assetic:
         datetimepicker:
             inputs:
                 - 'assets/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+        bootstrapcss:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
+        jqueryuicss:
+            inputs:
+                - 'assets/vendor/jquery-ui/themes/smoothness/jquery-ui.css'
+        datetimepickercss:
+            imputs:
+                - 'assets/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+
+
+
