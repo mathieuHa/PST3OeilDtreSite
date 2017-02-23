@@ -69,3 +69,26 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+        uglifyjs2:
+            bin: /usr/local/bin/uglifyjs
+    assets:
+        jquery:
+            inputs:
+                - 'assets/vendor/jquery/dist/jquery.min.js'
+        moment:
+            inputs:
+                - 'assets/vendor/moment/min/moment.min.js'
+        jqueryui:
+            inputs:
+                - 'assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js'
+        bootstrap:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/js/bootstrap.min.js'
+        datetimepicker:
+            inputs:
+                - 'assets/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
