@@ -10,4 +10,14 @@ class DefaultController extends Controller
     {
         return $this->render('DTREOeilSiteBundle:Default:index.html.twig');
     }
+
+    public function videoAction()
+    {
+        return $this->render('DTREOeilSiteBundle:Default:video.html.twig');
+    }
+
+    public function graphicsAction()
+    {
+        return $this->render('DTREOeilSiteBundle:Default:graphics.html.twig');
+    }
 }

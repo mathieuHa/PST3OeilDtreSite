@@ -1,3 +1,11 @@
 dtre_oeil_site_homepage:
     path:     /
     defaults: { _controller: DTREOeilSiteBundle:Default:index }
+
+dtre_oeil_site_graphique:
+    path:     /graphics
+    defaults: { _controller: DTREOeilSiteBundle:Default:graphics }
+
+dtre_oeil_site_video:
+    path:     /video
+    defaults: { _controller: DTREOeilSiteBundle:Default:video }
