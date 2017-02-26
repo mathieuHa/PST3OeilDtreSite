@@ -24,7 +24,7 @@ security:
 
           logout:
               path:       fos_user_security_logout
-              target:     /
+              target:     /oeil
           anonymous:    true
           remember_me:
               secret:     "%secret%" # %secret% est un paramètre de parameter
@@ -34,3 +34,5 @@ security:
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/admin/, role: ROLE_ADMIN }
+      - { path: ^/oeil, role: ROLE_USER }
+

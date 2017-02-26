@@ -1,6 +1,6 @@
 dtre_oeil_site:
     resource: "@DTREOeilSiteBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /oeil
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

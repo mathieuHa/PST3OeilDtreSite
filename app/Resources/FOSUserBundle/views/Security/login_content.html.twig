@@ -8,21 +8,38 @@
     {% if csrf_token %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
     {% endif %}
+    <div class="row">
+        <div class="form-group">
+                <div class="col-md-3">
+                    <label for="username">{{ 'security.login.username'|trans }}</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
+                </div>
+        </div>
+        <br>
 
-    <div class="form-group">
-        <label for="username">{{ 'security.login.username'|trans }}</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-    </div>
+        <div class="form-group">
+            <div class="col-md-3">
+                <label for="password">{{ 'security.login.password'|trans }}</label>
+            </div>
+            <div class="col-md-9">
+                <input type="password" id="password" name="_password" required="required" />
+            </div>
+        </div>
+        <br>
 
-    <div class="form-group">
-        <label for="password">{{ 'security.login.password'|trans }}</label>
-        <input type="password" id="password" name="_password" required="required" />
+        <div class="checkbox">
+            <div class="col-md-3">
+                <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+            </div>
+            <div class="col-md-9">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            </div>
+            <br>
+        </div>
     </div>
-
-    <div class="checkbox">
-        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-        <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
-    </div>
+    <br>
 
     <input type="submit"
            class="btn btn-success"
