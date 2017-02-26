@@ -1,8 +1,37 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
-    {{ form_widget(form) }}
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    <div class="row">
+        <div class="form-group form-group-lg">
+            <label class="col-sm-3 control-label" for="fos_user_registration_form_email">{{ 'form.email'|trans }}</label>
+            <div class="col-md-9">
+                <input type="email" class="form-control" placeholder="{{ 'form.email'|trans }}" id="fos_user_registration_form_email" name="fos_user_registration_form[email]" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <label class="col-sm-3 control-label" for="fos_user_registration_form_username">{{ 'form.username'|trans }}</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="{{ 'form.username'|trans }}" id="fos_user_registration_form_username" name="fos_user_registration_form[username]"  maxlength="180" pattern=".{2,}" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <label class="col-sm-3 control-label" for="fos_user_registration_form_plainPassword_first">{{ 'form.password'|trans }}</label>
+            <div class="col-md-9">
+                <input type="password" class="form-control" placeholder="{{ 'form.username'|trans }}" id="fos_user_registration_form_plainPassword_first" name="fos_user_registration_form[plainPassword][first]" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <label class="col-sm-3 control-label" for="fos_user_registration_form_plainPassword_second">{{ 'form.password_confirmation'|trans }}</label>
+            <div class="col-md-9">
+                <input type="password" class="form-control" placeholder="{{ 'form.password_confirmation'|trans }}" id="fos_user_registration_form_plainPassword_second" name="fos_user_registration_form[plainPassword][second]" required="required" />
+            </div>
+        </div>
+    </div>
     <div>
         <input type="submit" value="{{ 'registration.submit'|trans }}" />
     </div>
-{{ form_end(form) }}
+    {{ form_rest(form) }}
+</form>

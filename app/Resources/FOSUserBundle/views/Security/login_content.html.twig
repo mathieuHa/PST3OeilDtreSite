@@ -9,41 +9,46 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
     {% endif %}
     <div class="row">
-        <div class="form-group">
-                <div class="col-md-3">
-                    <label for="username">{{ 'security.login.username'|trans }}</label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
-                </div>
+        <div class="form-group form-group-lg">
+            <label class="col-sm-3 control-label" for="username">{{ 'security.login.username'|trans }}</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="{{ 'security.login.username'|trans }}" id="username" name="_username" value="{{ last_username }}" required="required" />
+            </div>
         </div>
         <br>
+        <br>
+        <br>
 
-        <div class="form-group">
+        <div class="form-group form-group-lg">
             <div class="col-md-3">
                 <label for="password">{{ 'security.login.password'|trans }}</label>
             </div>
             <div class="col-md-9">
-                <input type="password" id="password" name="_password" required="required" />
+                <input type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control" id="password" name="_password" required="required" />
             </div>
         </div>
         <br>
+        <br>
+        <br>
 
-        <div class="checkbox">
-            <div class="col-md-3">
+        <div class="form-group  col-md-offset-3 col-md-3">
+            <div class="checkbox">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
                 <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
             </div>
-            <div class="col-md-9">
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-            </div>
-            <br>
         </div>
+
+        <div class="col-md-3">
+            <input type="submit"
+                   class="btn btn-success "
+                   id="_submit"
+                   name="_submit"
+                   value="{{ 'security.login.submit'|trans }}" />
+        </div>
+
+
     </div>
     <br>
 
-    <input type="submit"
-           class="btn btn-success"
-           id="_submit"
-           name="_submit"
-           value="{{ 'security.login.submit'|trans }}" />
+
 </form>
