@@ -105,6 +105,8 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
     user_class: DTRE\OeilSiteBundle\Entity\User
+    group:
+        group_class: DTRE\OeilSiteBundle\Entity\Group
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
