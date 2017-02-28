@@ -9,3 +9,14 @@ dtre_oeil_site_graphique:
 dtre_oeil_site_video:
     path:     /video
     defaults: { _controller: DTREOeilSiteBundle:Default:video }
+
+dtre_oeil_site_users:
+    path:     /users
+    defaults: { _controller: DTREOeilSiteBundle:Admin:users }
+
+dtre_oeil_site_delete_user:
+    path:     /user/{id}/delete
+    defaults:
+        _controller: DTREOeilSiteBundle:Admin:deleteuser
+    requirements:
+            id:   \d+

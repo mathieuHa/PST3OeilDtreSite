@@ -1,0 +1,36 @@
+{% extends "DTREOeilSiteBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bundle_body %}
+    <div class="page-header">
+        <h1>Gestion des utilisateurs</h1>
+    </div>
+    <ul>
+    {% for u in users  %}
+      <li class="alert alert-success">  {{ u.username | upper }} <br> {{ u.email }}
+          {% for role in u.roles %}{{ role }}{% endfor %}
+          <div class="col-md-offset-10 col-md-4">
+                <a class="btn btn-danger"
+                   href="{{ path('dtre_oeil_site_delete_user',{'id':u.id}) }}"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+          </div>
+      </li>
+    {% endfor %}
+    </ul>
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}">
+                {{ message|trans({}, 'FOSUserBundle') }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+
+
+{% block bundle_javascript %}
+    {{ parent() }}
+{% endblock %}
