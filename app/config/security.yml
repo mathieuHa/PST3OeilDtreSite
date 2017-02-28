@@ -27,7 +27,9 @@ security:
               target:     /oeil
           anonymous:    true
           remember_me:
-              secret:     "%secret%" # %secret% est un paramètre de parameter
+              secret:      "%secret%"
+              lifetime: 3600 # 1 day in seconds
+              path:     /oeil
 
   access_control:
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

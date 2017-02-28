@@ -111,3 +111,4 @@ fos_user:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
 
+

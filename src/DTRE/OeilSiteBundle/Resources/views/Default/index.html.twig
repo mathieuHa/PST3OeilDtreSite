@@ -5,12 +5,10 @@
 {% endblock %}
 
 {% block bundle_body %}
-    <h2>Accueil</h2>
+    <div class="page-header">
+        <h1>Accueil</h1>
+    </div>
 
-    <hr>
-
-
-    {# On affiche les messages flash que définissent les contrôleurs du bundle #}
     {% for key, messages in app.session.flashbag.all() %}
         {% for message in messages %}
             <div class="alert alert-{{ key }}">

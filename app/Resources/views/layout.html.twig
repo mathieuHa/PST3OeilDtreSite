@@ -20,7 +20,6 @@
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-
         {% javascripts
         '@jquery'
         '@moment'
@@ -64,15 +63,18 @@
 <h1><a href="{{ path('dtre_oeil_site_homepage') }}">Oeil de la DTRE</a></h1>
 <p>
     Un outil de monitoring et surveillance pour l'association robotique de l'ESIEA : DTRE<br><br>
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        Connecté en tant que {{ app.user.username }}
-        -
-        <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
-    {% else %}
-        <a href="{{ path('fos_user_security_login') }}">Connexion</a>
-    {% endif %}
 </p>
+
 </div>
+
+    <div class="alert-info"> {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            Connecté en tant que {{ app.user.username }}
+            -
+            <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+        {% endif %}
+    </div>
 
 <div class="row">
     <div id="menu" class="col-md-2">
@@ -90,6 +92,11 @@
     </div>
 </div>
 
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            END
+        </div>
+    </nav>
 <hr>
 
 <footer>
