@@ -9,8 +9,16 @@
         <h1>Video</h1>
     </div>
 
+    <canvas id="video-canvas"></canvas>
+    
 {% endblock %}
 
 {% block bundle_javascript %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/jsmpeg.min.js') }}"></script>
+    <script type="text/javascript">
+        var canvas = document.getElementById('video-canvas');
+        var url = 'ws://'+document.location.hostname+':8082/';
+        var player = new JSMpeg.Player(url, {canvas: canvas});
+    </script>
 {% endblock %}
