@@ -8,17 +8,41 @@
     <div class="page-header">
         <h1>Video</h1>
     </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Streaming Video</h3>
+        </div>
+        <div class="panel-body">
 
-    <canvas id="video-canvas"></canvas>
-    
+            <div class="jsmpeg" data-url="ws://192.168.1.81:8082/" style="width:640px; height=480px"></div>
+        </div>
+    </div>
+
+    <p><input type="button" value="poke" id="poke" /></p>
+    <p><input type="button" value="Activer le stream" id="start-stream" /></p>
+
+
 {% endblock %}
 
 {% block bundle_javascript %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('assets/js/jsmpeg.min.js') }}"></script>
+
+    <script src="{{ asset('http://192.168.1.81:8080/socket.io/socket.io.js') }}"></script>
+
     <script type="text/javascript">
-        var canvas = document.getElementById('video-canvas');
-        var url = 'ws://'+document.location.hostname+':8082/';
-        var player = new JSMpeg.Player(url, {canvas: canvas});
+        var socket = io.connect('http://192.168.1.81:8080');
+        socket.on('message', function(message) {
+            alert('Le serveur a un message pour vous : ' + message);
+        })
+
+        $('#poke').click(function () {
+            socket.emit('message', 'Salut serveur, ça va ?');
+            socket.emit('cmd', 'Start Stream');
+        })
+        $("#start-stream").on("click", function(){
+            console.log("starting stream");
+
+        });
     </script>
 {% endblock %}
