@@ -1,3 +1,7 @@
+
+
+
+
 {% extends "DTREOeilSiteBundle::layout.html.twig" %}
 
 {% block title %}
@@ -13,36 +17,34 @@
             <h3 class="panel-title">Streaming Video</h3>
         </div>
         <div class="panel-body">
-
-            <div class="jsmpeg" data-url="ws://192.168.1.81:8082/" style="width:640px; height=480px"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="http://192.168.1.81:8090/?action=stream" />
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="glyphicon glyphicon-arrow-left" id="left">Gauche</button>
+                    <button type="button" class="glyphicon glyphicon-arrow-right" id="right">Droite</button>
+                    <button type="button" class="glyphicon glyphicon-arrow-up" id="up">Haut</button>
+                    <button type="button" class="glyphicon glyphicon-arrow-down" id="down">Bas</button>
+                    <button type="button" class="glyphicon glyphicon-hand-left" id="up-left">Haut-Gauche</button>
+                    <button type="button" class="glyphicon glyphicon-hand-right" id="up-right">Haut-Droite</button>
+                    <button type="button" class="glyphicon glyphicon-hand-up" id="down-left">Bas-Gauche</button>
+                    <button type="button" class="glyphicon glyphicon-hand-down" id="down-right">Bas-Droit</button>
+                    <button type="button" class="glyphicon glyphicon-screenshot" id="center">Centrer</button></p>
+                    <button type="button" class="glyphicon glyphicon-flash" aria-hidden="true" id="light-on">Allumer</button>
+                    <button type="button" class="glyphicon glyphicon-off" aria-hidden="true" id="light-off">Eteindre</button></p>
+                </div>
+            </div>
         </div>
     </div>
-
-    <p><input type="button" value="poke" id="poke" /></p>
-    <p><input type="button" value="Activer le stream" id="start-stream" /></p>
-
 
 {% endblock %}
 
 {% block bundle_javascript %}
+
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('assets/js/jsmpeg.min.js') }}"></script>
+    <script src="{{ asset('http://192.168.1.27:8080/socket.io/socket.io.js') }}"></script>
 
-    <script src="{{ asset('http://192.168.1.81:8080/socket.io/socket.io.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/video_control.js') }}"></script>
 
-    <script type="text/javascript">
-        var socket = io.connect('http://192.168.1.81:8080');
-        socket.on('message', function(message) {
-            alert('Le serveur a un message pour vous : ' + message);
-        })
-
-        $('#poke').click(function () {
-            socket.emit('message', 'Salut serveur, ça va ?');
-            socket.emit('cmd', 'Start Stream');
-        })
-        $("#start-stream").on("click", function(){
-            console.log("starting stream");
-
-        });
-    </script>
 {% endblock %}
