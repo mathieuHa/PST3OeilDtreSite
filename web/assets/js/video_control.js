@@ -10,15 +10,19 @@ $(document).ready(function(){
 
     $('#left').click(function () {
         socket.emit('left', 'LEFT');
+        alert('left');
     });
     $('#right').click(function () {
         socket.emit('right', 'RIGHT');
+        alert('right');
     });
     $('#up').click(function () {
         socket.emit('up', 'UP');
+        alert('top');
     });
     $('#down').click(function () {
         socket.emit('down', 'DOWN');
+        alert('down');
     });
     $('#start_record').click(function () {
         socket.emit('start_record');
