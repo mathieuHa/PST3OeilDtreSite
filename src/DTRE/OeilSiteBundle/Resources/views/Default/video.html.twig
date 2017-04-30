@@ -23,12 +23,17 @@
                 </div>
                 <div class="col-md-6">
                     {% image 'public/images/gauche.png' %}
-                    <img src="{{ asset_url }}" alt="Example" id="left1" />
+                    <img src="{{ asset_url }}" alt="Example" id="left" />
                     {% endimage %}
-                    <img src="{{ asset('public/images/gauche.png') }}" id="left"/>
-                    <img src="{{ asset('public/images/droite.png') }}" id="right"/>
-                    <img src="{{ asset('public/images/bas.png') }}" id="down"/>
-                    <img src="{{ asset('public/images/haut.png') }}" id="up"/>
+                    {% image 'public/images/droite.png' %}
+                    <img src="{{ asset_url }}" alt="Example" id="droite" />
+                    {% endimage %}
+                    {% image 'public/images/bas.png' %}
+                    <img src="{{ asset_url }}" alt="Example" id="down" />
+                    {% endimage %}
+                    {% image 'public/images/haut.png' %}
+                    <img src="{{ asset_url }}" alt="Example" id="up" />
+                    {% endimage %}
 
                     <button type="button" class="glyphicon glyphicon-arrow-right" id="right">Droite</button>
                     <button type="button" class="glyphicon glyphicon-arrow-up" id="up">Haut</button>
