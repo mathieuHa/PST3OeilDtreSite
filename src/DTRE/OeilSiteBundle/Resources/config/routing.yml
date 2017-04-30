@@ -10,6 +10,10 @@ dtre_oeil_site_video:
     path:     /video
     defaults: { _controller: DTREOeilSiteBundle:Default:video }
 
+dtre_oeil_site_media:
+    path:     /media
+    defaults: { _controller: DTREOeilSiteBundle:Default:media }
+
 dtre_oeil_site_users:
     path:     /users
     defaults: { _controller: DTREOeilSiteBundle:Admin:users }
