@@ -19,20 +19,25 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <img src="http://192.168.1.81:8090/?action=stream" />
+                    <img src="http://93.12.53.245:8090/?action=stream" width="100%" height="auto" />
                 </div>
                 <div class="col-md-6">
-                    <button type="button" class="glyphicon glyphicon-arrow-left" id="left">Gauche</button>
+                    {% image 'Resources/public/images/gauche.png' %}
+                    <img src="{{ asset_url }}" alt="Example" id="left1" />
+                    {% endimage %}
+                    <img src="{{ asset('bundles/img/gauche.png') }}" id="left"/>
+                    <img src="{{ asset('bundles/img/droite.png') }}" id="right"/>
+                    <img src="{{ asset('bundles/img/bas.png') }}" id="down"/>
+                    <img src="{{ asset('bundles/img/haut.png') }}" id="up"/>
                     <button type="button" class="glyphicon glyphicon-arrow-right" id="right">Droite</button>
                     <button type="button" class="glyphicon glyphicon-arrow-up" id="up">Haut</button>
                     <button type="button" class="glyphicon glyphicon-arrow-down" id="down">Bas</button>
-                    <button type="button" class="glyphicon glyphicon-hand-left" id="up-left">Haut-Gauche</button>
-                    <button type="button" class="glyphicon glyphicon-hand-right" id="up-right">Haut-Droite</button>
-                    <button type="button" class="glyphicon glyphicon-hand-up" id="down-left">Bas-Gauche</button>
-                    <button type="button" class="glyphicon glyphicon-hand-down" id="down-right">Bas-Droit</button>
-                    <button type="button" class="glyphicon glyphicon-screenshot" id="center">Centrer</button></p>
+                    <button type="button" class="glyphicon glyphicon-screenshot" id="center">Centrer</button>
                     <button type="button" class="glyphicon glyphicon-flash" aria-hidden="true" id="light-on">Allumer</button>
-                    <button type="button" class="glyphicon glyphicon-off" aria-hidden="true" id="light-off">Eteindre</button></p>
+                    <button type="button" class="glyphicon glyphicon-off" aria-hidden="true" id="light-off">Eteindre</button>
+                    <button type="button" class="glyphicon glyphicon-record" aria-hidden="true" id="start_record">Start record</button>
+                    <button type="button" class="glyphicon glyphicon-stop" aria-hidden="true" id="stop_record">Stop record</button>
+                    <button type="button" class="glyphicon glyphicon-camera" aria-hidden="true" id="picture">Prendre une photo</button>
                 </div>
             </div>
         </div>
@@ -43,8 +48,12 @@
 {% block bundle_javascript %}
 
     {{ parent() }}
-    <script src="{{ asset('http://192.168.1.27:8080/socket.io/socket.io.js') }}"></script>
+    <script src="{{ asset('http://93.12.53.245:8080/socket.io/socket.io.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('assets/js/video_control.js') }}"></script>
+
+    <script type="text/javascript">
+
+    </script>
 
 {% endblock %}

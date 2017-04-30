@@ -3,7 +3,7 @@
  */
 $(document).ready(function(){
 
-    var socket = io.connect('http://192.168.1.27:8080');
+    var socket = io.connect('http://93.12.53.245:8080');
     socket.on('message', function(message) {
         alert('Le serveur a un message pour vous : ' + message);
     });
@@ -20,17 +20,14 @@ $(document).ready(function(){
     $('#down').click(function () {
         socket.emit('down', 'DOWN');
     });
-    $('#up-left').click(function () {
-        socket.emit('up-left', 'UP-LEFT');
+    $('#start_record').click(function () {
+        socket.emit('start_record');
     });
-    $('#up-right').click(function () {
-        socket.emit('up-right', 'UP-RIGHT');
+    $('#stop_record').click(function () {
+        socket.emit('start_record');
     });
-    $('#down-left').click(function () {
-        socket.emit('down-left', 'DOWN-LEFT');
-    });
-    $('#down-right').click(function () {
-        socket.emit('down-right', 'DOWN-RIGHT');
+    $('#picture').click(function () {
+        socket.emit('picture');
     });
     $('#center').click(function () {
         socket.emit('center', 'CENTER');
