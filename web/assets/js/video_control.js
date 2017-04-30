@@ -28,7 +28,7 @@ $(document).ready(function(){
         socket.emit('start_record');
     });
     $('#stop_record').click(function () {
-        socket.emit('start_record');
+        socket.emit('stop_record');
     });
     $('#picture').click(function () {
         socket.emit('picture');
