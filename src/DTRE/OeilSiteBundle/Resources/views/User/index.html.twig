@@ -1,0 +1,25 @@
+{% extends "DTREOeilSiteBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bundle_body %}
+    <div class="page-header">
+        <h1>Accueil</h1>
+    </div>
+
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}">
+                {{ message|trans({}, 'FOSUserBundle') }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block bundle_javascript %}
+    {{ parent() }}
+{% endblock %}

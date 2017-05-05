@@ -1,0 +1,40 @@
+
+
+
+
+{% extends "DTREOeilSiteBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} Video
+{% endblock %}
+
+{% block bundle_body %}
+    <div class="page-header">
+        <h1>Video</h1>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Streaming Video</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <img src="http://mathieuhanotaux.ddns.net:8090/?action=stream" width="100%" height="auto" class="img-thumbnail" />
+                    <br>
+                </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block bundle_javascript %}
+
+    {{ parent() }}
+    <script src="{{ asset('http://mathieuhanotaux.ddns.net:8080/socket.io/socket.io.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('assets/js/video_control.js') }}"></script>
+
+{% endblock %}
