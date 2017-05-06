@@ -1,3 +1,10 @@
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /oeil
+        permanent: true
+
 dtre_oeil_site:
     resource: "@DTREOeilSiteBundle/Resources/config/routing.yml"
     prefix:   /oeil
