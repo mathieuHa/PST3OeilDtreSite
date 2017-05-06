@@ -3,7 +3,7 @@
  */
 $(document).ready(function(){
 
-    var IP = "http://oeildtreapi.ddns.net";
+    var IP = "http://oeildtreapi.hanotaux.fr/api";
 
     // initialisation de l'api google pour les graphiques linéaires
     google.charts.load('current', {'packages':['line'], 'language': 'fr'});
