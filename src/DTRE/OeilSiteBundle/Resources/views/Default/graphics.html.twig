@@ -430,6 +430,7 @@
                 }
             }
             function setHeader(xhr) {
+                console.log(token);
                 xhr.setRequestHeader('X-Auth-Token', token);
             }
             function newToken() {
