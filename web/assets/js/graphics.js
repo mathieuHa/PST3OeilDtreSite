@@ -4,7 +4,6 @@
 $(document).ready(function(){
 
     var IP = "http://oeildtreapi.hanotaux.fr/api";
-
     // initialisation de l'api google pour les graphiques linéaires
     google.charts.load('current', {'packages':['line'], 'language': 'fr'});
     google.charts.load('current', {'packages':['corechart'], 'language': 'fr'});
@@ -69,18 +68,32 @@ $(document).ready(function(){
     console.log(time);
 
     function getSensorInformation() {
-        $.getJSON(IP+"/sensors", function(result){
-            console.log(result);
-            $.each(result, function(i, field){
-                sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
-            });
-            console.log(sensors);
-            setDatePickerDay();
-            setDatePickerMonth();
-            setDatePickerYear();
-            select = "day";
-            handleDay();
+        $.ajax({
+            url: IP+"/sensors",
+            type: 'GET',
+            dataType: 'json',
+            success: function(result) {
+                alert('hello!');
+                console.log(result);
+                $.each(result, function(i, field){
+                    sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
+                });
+                console.log(sensors);
+                setDatePickerDay();
+                setDatePickerMonth();
+                setDatePickerYear();
+                select = "day";
+                handleDay();
+            },
+            error: function() { alert('boo!'); },
+            beforeSend: setHeader
         });
+
+/*
+        $.ajax(IP+"/sensors", function(result){
+
+        });
+        */
     }
 
     function getDayData(sensor, time) {
@@ -317,6 +330,26 @@ $(document).ready(function(){
                 break;
         }
     }
+    function setHeader(xhr) {
+        xhr.setRequestHeader('X-Auth-Token', token);
+    }
+
+    function getToken() {
+        $.ajax({
+            url: IP+"/auth-tokens",
+            type: 'POST',
+            dataType: 'json',
+            success: function(result) {
+                console.log(result);
+
+            },
+            error: function() {
+                console.log("Erreur autentification POST /auth-tokens");
+            },
+            beforeSend: setHeader
+        });
+    }
+
 
     getSensorInformation();
 });

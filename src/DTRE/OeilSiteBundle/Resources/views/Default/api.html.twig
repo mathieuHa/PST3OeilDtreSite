@@ -1,0 +1,59 @@
+{% extends "DTREOeilSiteBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bundle_body %}
+    <div class="page-header">
+        <h1>Activation de l'API</h1>
+    </div>
+
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}">
+                {{ message|trans({}, 'FOSUserBundle') }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form(form) }}
+    <a class="btn btn-success" id="Valider">Create Api Account
+    </a>
+
+{% endblock %}
+
+
+{% block bundle_javascript %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            var IP = "http://oeildtreapi.hanotaux.fr/api";
+            console.log("DANS JS");
+            $("#Valider").click(function () {
+                    createAccount();
+            });
+            function createAccount() {
+                $.ajax({
+                    url: IP + "/users",
+                    type: "POST",
+                    data: {
+                        prenom: "mathieu",
+                        nom: "hanotaux",
+                        mail: "{{ user.email }}",
+                        plainpassword: "{{ user.apipassword }}"
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("success");
+                        console.log(result);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        console.log("Erreur creation POST /users");
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -34,9 +34,43 @@ class User extends BaseUser
      */
     protected $groups;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apiPassword", type="string", nullable=true, length=255)
+     */
+    private $apiPassword;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apiToken", type="string", nullable=true, length=255)
+     */
+    private $apiToken;
+
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+    }
+
+    public function getApiPassword()
+    {
+        return $this->apiPassword;
+    }
+
+    public function setApiPassword($apiPassword)
+    {
+        $this->apiPassword = $apiPassword;
+    }
+
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
     }
 }
