@@ -172,7 +172,9 @@
                     url: IP+"/sensors",
                     type: 'GET',
                     dataType: 'json',
-                    beforeSend: setHeader(xhr),
+                    beforeSend: function(request) {
+                        request.setRequestHeader("X-Auth-Token", token);
+                    },
                     success: function(result) {
                         console.log("Reussi");
                         console.log(result);
@@ -190,7 +192,7 @@
                         console.log("Erreur de token");
                         console.log(result);
                         newToken();
-                    },
+                    }
 
                 });
             }
