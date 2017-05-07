@@ -441,16 +441,43 @@
                         password: password
                     },
                     success: function(result) {
+                        console.log(token);
+                        token = result.value;
+                        console.log(token);
                         console.log(result);
+                        getSensorInformation();
+                        saveToken();
+
 
                     },
                     error: function(result) {
                         console.log(result);
                         console.log("Erreur autentification POST /auth-tokens");
+                    }
+                });
+            }
+            function saveToken() {
+                $.ajax({
+                    url: "/dtre_oeil_site_api_new_token",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        login: login,
+                        password: password
                     },
+                    success: function(result) {
+                        console.log(result);
+                        saveToken();
+
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        console.log("Erreur autentification POST /save-token");
+                    }
                 });
             }
             getSensorInformation();
+
         });
     </script>
 {% endblock %}

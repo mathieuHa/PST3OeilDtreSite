@@ -5,7 +5,9 @@ namespace DTRE\OeilSiteBundle\Controller;
 use DTRE\OeilSiteBundle\Entity\ApiUser;
 use DTRE\OeilSiteBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DefaultController extends Controller
 {
@@ -51,6 +53,25 @@ class DefaultController extends Controller
                 'form'=>$form->CreateView(),
                 'user'=>$user
             ));
+        }
+    }
+
+    public function apitokenAction(Request $request)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new BadRequestHttpException('Only ajax accepted');
+        }
+        if ($request->isMethod('POST') && $request->request->has('token')) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getUser();
+            $user->setApiToken($request->request->get('token'));
+            $em->persist($user);
+            $em->flush();
+            return new JsonResponse(array(
+                'status' => 'ok',
+            ));
+        } else {
+            throw new BadRequestHttpException('No token in request');
         }
     }
 

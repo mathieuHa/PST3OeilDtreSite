@@ -6,6 +6,10 @@ dtre_oeil_site_api_registration:
     path:     /api-registration
     defaults: { _controller: DTREOeilSiteBundle:Default:api }
 
+dtre_oeil_site_api_new_token:
+    path:     /api-refresh-token
+    defaults: { _controller: DTREOeilSiteBundle:Default:apitoken }
+
 dtre_oeil_site_graphique:
     path:     /graphics
     defaults: { _controller: DTREOeilSiteBundle:Default:graphics }
