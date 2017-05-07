@@ -172,6 +172,7 @@
                     url: IP+"/sensors",
                     type: 'GET',
                     dataType: 'json',
+                    beforeSend: setHeader(xhr),
                     success: function(result) {
                         console.log("Reussi");
                         console.log(result);
@@ -190,7 +191,7 @@
                         console.log(result);
                         newToken();
                     },
-                    beforeSend: setHeader
+
                 });
             }
 
