@@ -99,7 +99,7 @@
 
         $(document).ready(function(){
 
-            var IP = "http://localhost/pst3oeildtre/web/app_dev.php/api";
+            var IP = "oeildtreapi.hanotaux.fr/api";
             var token = "{{ token }}";
             var login = "{{ login }}";
             console.log("token : "+token);
@@ -504,7 +504,7 @@
             }
             function saveToken(token) {
                 $.ajax({
-                    url: "http://localhost/pst3oeildtresite/web/app_dev.php/oeil/api-refresh-token",
+                    url: "/oeil/api-refresh-token",
                     type: 'POST',
                     dataType: 'json',
                     data: {
