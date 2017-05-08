@@ -22,9 +22,6 @@
             <button type="button" id="month" class="btn btn-default desactiver">Month</button>
         </div>
         <div class="btn-group" role="group">
-            <button type="button" id="semester" class="btn btn-default desactiver">Semester</button>
-        </div>
-        <div class="btn-group" role="group">
             <button type="button" id="year" class="btn btn-default desactiver">Year</button>
         </div>
     </div>
@@ -92,6 +89,8 @@
             </div>
     </div>
 
+    {{ include("DTREOeilSiteBundle:Template:modal_connect.html.twig") }}
+
 {% endblock %}
 
 {% block bundle_javascript %}
@@ -100,10 +99,11 @@
 
         $(document).ready(function(){
 
-            var IP = "http://oeildtreapi.hanotaux.fr/api";
+            var IP = "http://localhost/pst3oeildtre/web/app_dev.php/api";
             var token = "{{ token }}";
             var login = "{{ login }}";
-            var password = "{{ password }}";
+            console.log("token : "+token);
+            console.log("login : "+login);
             // initialisation de l'api google pour les graphiques linéaires
             google.charts.load('current', {'packages':['line'], 'language': 'fr'});
             google.charts.load('current', {'packages':['corechart'], 'language': 'fr'});
@@ -167,18 +167,23 @@
             var time = new Time (now.getUTCFullYear(), now.getUTCMonth()+1, now.getUTCDate());
             console.log(time);
 
-            function getSensorInformation() {
+            function getSensorInformation(token) {
                 $.ajax({
                     url: IP+"/sensors",
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function(request) {
-                        request.setRequestHeader("X-Auth-Token", token);
+                        request.setRequestHeader('X-Auth-Token', token);
                     },
-                    success: function(result) {
+                    success: function(data,result, o) {
                         console.log("Reussi");
+                        console.log("data");
+                        console.log(data);
+                        console.log("res");
                         console.log(result);
-                        $.each(result, function(i, field){
+                        console.log("o");
+                        console.log(o);
+                        $.each(data, function(i, field){
                             sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"chart"+(i+1), null));
                         });
                         console.log(sensors);
@@ -199,71 +204,115 @@
 
             function getDayData(sensor, time) {
                 console.log(time);
-                $.getJSON(IP+"/sensors/" +sensor.id+ "/data/day" +
+                $.ajax({
+                    url: IP+"/sensors/" +sensor.id+ "/data/day" +
                     "?day="+ time.day +
                     "&month="+ time.month +
-                    "&year="+ time.year
-                    , function(result){
-                        sensor.data = result;
+                    "&year="+ time.year,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data,result, o) {
+                        sensor.data = data;
                         if(sensor.data.length != 0){
                             google.charts.setOnLoadCallback(drawDayChart(sensor));
                         } else {
                             noData(sensor.location);
                         }
 
-                    });
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
+
             }
             function getWeekData(sensor, time) {
-                $.getJSON(IP+"/sensors/"+sensor.id+"/dailydata/week" +
+                $.ajax({
+                    url: IP+"/sensors/"+sensor.id+"/dailydata/week" +
                     "?day="+ time.day +
                     "&month="+ time.month +
-                    "&year="+ time.year
-                    , function(result){
-                        sensor.data = result;
+                    "&year="+ time.year,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data,result, o) {
+                        sensor.data = data;
                         if(sensor.data.length != 0){
                             google.charts.setOnLoadCallback(drawLongChart(sensor));
                         } else {
                             noData(sensor.location);
                         }
-                    });
+
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
             }
             function getMonthData(sensor, time) {
-                $.getJSON(IP+"/sensors/"+sensor.id+"/dailydata/month" +
+                $.ajax({
+                    url: IP+"/sensors/"+sensor.id+"/dailydata/month" +
                     "?month="+ time.month +
-                    "&year="+ time.year
-                    , function(result){
-                        sensor.data = result;
+                    "&year="+ time.year,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data,result, o) {
+                        sensor.data = data;
                         if(sensor.data.length != 0){
                             google.charts.setOnLoadCallback(drawLongChart(sensor));
                         } else {
                             noData(sensor.location);
                         }
-                    });
+
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
             }
-            function getSemesterData(sensor, time) {
-                $.getJSON(IP+"/sensors/"+sensor.id+"/dailydata/semester" +
-                    "?month="+ time.month +
-                    "&year="+ time.year
-                    , function(result){
-                        sensor.data = result;
-                        if(sensor.data.length != 0){
-                            google.charts.setOnLoadCallback(drawLongChart(sensor));
-                        } else {
-                            noData(sensor.location);
-                        }
-                    });
-            }
+
             function getYearData(sensor, time) {
-                $.getJSON(IP+"/sensors/"+sensor.id+"/dailydata/year" +
-                    "?year="+ time.year
-                    , function(result){
-                        sensor.data = result;
+                $.ajax({
+                    url: IP+"/sensors/"+sensor.id+"/dailydata/year" +
+                    "?year="+ time.year,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data,result, o) {
+                        sensor.data = data;
                         if(sensor.data.length != 0){
                             google.charts.setOnLoadCallback(drawLongChart(sensor));
                         } else {
                             noData(sensor.location);
                         }
-                    });
+
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
             }
             function drawDayChart(sensor) {
                 var data = new google.visualization.DataTable();
@@ -344,11 +393,6 @@
                 setDatePickerMonth();
                 handleMonth();
             });
-            $("#semester").on("click", function () {
-                select = "semester";
-                setDatePickerMonth();
-                handleSemester();
-            });
             $("#year").on("click", function () {
                 select = "year";
                 setDatePickerYear();
@@ -396,12 +440,6 @@
                 }
             }
 
-            function handleSemester() {
-                for (var j = 0; j < sensors.length; j++) {
-                    getSemesterData(sensors[j], time);
-                }
-            }
-
             function handleWeek() {
                 for (var j = 0; j < sensors.length; j++) {
                     getWeekData(sensors[j], time);
@@ -431,47 +469,50 @@
                         break;
                 }
             }
-            function setHeader(xhr) {
-                console.log(token);
-                xhr.setRequestHeader('X-Auth-Token', token);
-            }
             function newToken() {
-                $.ajax({
-                    url: IP+"/auth-tokens",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        login: login,
-                        password: password
-                    },
-                    success: function(result) {
-                        console.log(token);
-                        token = result.value;
-                        console.log(token);
-                        console.log(result);
-                        getSensorInformation();
-                        saveToken();
+                $("#modalP").modal();
+                $("#save").on('click', (function (e) {
+                    e.preventDefault();
+                    pass = $('#dtre_oeilsitebundle_user_apiToken').val();
+                    console.log(pass);
+                    $.ajax({
+                        url: IP+"/auth-tokens",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            login: login,
+                            password: pass
+                        },
+                        success: function(result) {
+                            console.log(token);
+                            token = result.value;
+                            console.log(token);
+                            console.log(result);
+                            getSensorInformation(token);
+                            saveToken(token);
 
+                        },
+                        error: function(result) {
+                            console.log(result);
+                            console.log("Erreur autentification POST /auth-tokens");
+                        }
+                    });
+                    $("#modalP").modal('hide');
+                    return false;
+                }));
 
-                    },
-                    error: function(result) {
-                        console.log(result);
-                        console.log("Erreur autentification POST /auth-tokens");
-                    }
-                });
             }
-            function saveToken() {
+            function saveToken(token) {
                 $.ajax({
-                    url: "/dtre_oeil_site_api_new_token",
+                    url: "http://localhost/pst3oeildtresite/web/app_dev.php/oeil/api-refresh-token",
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        login: login,
-                        password: password
+                        token: token
                     },
                     success: function(result) {
                         console.log(result);
-                        saveToken();
+
 
                     },
                     error: function(result) {
@@ -480,7 +521,7 @@
                     }
                 });
             }
-            getSensorInformation();
+            getSensorInformation(token);
 
         });
     </script>

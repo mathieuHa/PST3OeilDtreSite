@@ -33,27 +33,10 @@ class DefaultController extends Controller
             ->get('form.factory')
             ->create(UserType::class,$user);
 
-
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()){
-            $em = $this
-                ->getDoctrine()
-                ->getManager();
-            $user->setApiToken("Toto");
-            $em->persist($user);
-            $em->flush();
-
-            $this
-                ->addFlash(
-                    'notice','Post Agenda crée'
-                );
-
-            return $this->redirectToRoute('dtre_oeil_site_homepage');
-        } else {
-            return $this->render('DTREOeilSiteBundle:Default:api.html.twig', array(
-                'form'=>$form->CreateView(),
-                'user'=>$user
-            ));
-        }
+        return $this->render('DTREOeilSiteBundle:Default:api.html.twig', array(
+            'user'=>$user,
+            'form'=>$form->createView()
+        ));
     }
 
     public function apitokenAction(Request $request)
@@ -78,10 +61,14 @@ class DefaultController extends Controller
     public function graphicsAction()
     {
         $user = $this->getUser();
+        $form = $this
+            ->get('form.factory')
+            ->create(UserType::class,$user);
+
         return $this->render('DTREOeilSiteBundle:Default:graphics.html.twig', array(
             'token'=>$user->getApiToken(),
             'login'=>$user->getEmail(),
-            'password'=>$user->getApiPassword()
+            'form'=>$form->createView()
         ));
     }
 }

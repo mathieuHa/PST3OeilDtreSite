@@ -16,8 +16,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('apiPassword', PasswordType::class)
-            ->add('sauver', SubmitType::class)
+            ->add('apiToken', PasswordType::class)
         ;
     }
     

@@ -17,9 +17,12 @@
         {% endfor %}
     {% endfor %}
 
-    {{ form(form) }}
+    <br>
+    <br>
     <a class="btn btn-success" id="Valider">Create Api Account
     </a>
+
+    {{ include("DTREOeilSiteBundle:Template:modal_register.html.twig") }}
 
 {% endblock %}
 
@@ -28,12 +31,21 @@
     {{ parent() }}
     <script>
         $(document).ready(function() {
-            var IP = "http://oeildtreapi.hanotaux.fr/api";
+            var IP = "http://localhost/pst3oeildtre/web/app_dev.php/api";
             console.log("DANS JS");
             $("#Valider").click(function () {
-                    createAccount();
+                    $("#modalP").modal();
             });
-            function createAccount() {
+            $("#save").on('click', (function (e) {
+                e.preventDefault();
+                pass = $('#dtre_oeilsitebundle_user_apiToken').val();
+                console.log(pass);
+                createAccount(pass);
+                $("#modalP").modal('hide');
+                return false;
+            }));
+
+            function createAccount(password) {
                 $.ajax({
                     url: IP + "/users",
                     type: "POST",
@@ -41,7 +53,7 @@
                         prenom: "mathieu",
                         nom: "hanotaux",
                         mail: "{{ user.email }}",
-                        plainpassword: "{{ user.apipassword }}"
+                        plainpassword: password
                     },
                     dataType: 'json',
                     success: function (result) {

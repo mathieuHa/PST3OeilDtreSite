@@ -38,13 +38,6 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="apiPassword", type="string", nullable=true, length=255)
-     */
-    private $apiPassword;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="apiToken", type="string", nullable=true, length=255)
      */
     private $apiToken;
@@ -52,16 +45,6 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-    }
-
-    public function getApiPassword()
-    {
-        return $this->apiPassword;
-    }
-
-    public function setApiPassword($apiPassword)
-    {
-        $this->apiPassword = $apiPassword;
     }
 
     public function getApiToken()
