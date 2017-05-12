@@ -50,8 +50,7 @@
                     url: IP + "/users",
                     type: "POST",
                     data: {
-                        prenom: "mathieu",
-                        nom: "hanotaux",
+                        login: "{{ user.username }}",
                         mail: "{{ user.email }}",
                         plainpassword: password
                     },
