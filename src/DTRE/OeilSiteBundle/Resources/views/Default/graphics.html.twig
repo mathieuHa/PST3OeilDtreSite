@@ -99,7 +99,7 @@
 
         $(document).ready(function(){
 
-            var IP = "https://oeildtreapi.hanotaux.fr/api";
+            var IP = "https://oeildtapi.hanotaux.fr/api";
             var token = "{{ token }}";
             var login = "{{ login }}";
             console.log("token : "+token);
@@ -169,7 +169,7 @@
 
             function getSensorInformation(token) {
                 $.ajax({
-                    url: "https://oeildtreapi.hanotaux.fr/api/sensors",
+                    url: "https://oeildtapi.hanotaux.fr/api/sensors",
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function(request) {
@@ -472,7 +472,7 @@
                     console.log(pass);
                     console.log("new token()");
                     $.ajax({
-                        url: "https://oeildtreapi.hanotaux.fr/api/auth-tokens",
+                        url: "https://oeildtapi.hanotaux.fr/api/auth-tokens",
                         type: 'POST',
                         dataType: 'json',
                         data: {
