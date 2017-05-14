@@ -58,6 +58,9 @@
                     });
                     console.log(data);
                     console.log(images);
+
+
+                    addPictures(images);
                 },
                 error: function(result) {
                     console.log("Erreur de token");
@@ -65,6 +68,11 @@
                     newToken();
                 }
 
+            });
+        }
+        function addPictures(images) {
+            $.each(images, function(image){
+                console.log(image);
             });
         }
 
