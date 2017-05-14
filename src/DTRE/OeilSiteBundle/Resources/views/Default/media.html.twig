@@ -12,20 +12,12 @@
     <div class="page-header">
         <h1>Médias</h1>
     </div>
-    {% set images =
-    {
-    {'urlth':'https://raspbian-france.fr/wp-content/uploads/2014/03/serveur_web_raspberry-800x528.jpg'},
-    {'urlth':'https://raspbian-france.fr/wp-content/uploads/2014/03/serveur_web_raspberry-800x528.jpg'},
-    {'urlth':'https://raspbian-france.fr/wp-content/uploads/2014/03/serveur_web_raspberry-800x528.jpg'},
-    {'urlth':'https://raspbian-france.fr/wp-content/uploads/2014/03/serveur_web_raspberry-800x528.jpg'}
-    }
-    %}
+
     <div class="row">
-        {% for img in images %}
+
             <div class="col-md-3">
                 <img src="{{ img.urlth }}" width="100%" height="auto">
             </div>
-        {% endfor %}
     </div>
 
 
@@ -42,6 +34,16 @@
 
         getImages();
 
+        function Image(url, urlth) {
+            this.url = url;
+            this.urlth = urlth;
+        }
+
+        var select = "";
+
+        var images = [];
+        now = new Date();
+
         function getImages() {
             $.ajax({
                 url: "https://oeildtapi.hanotaux.fr/api/media/images",
@@ -51,8 +53,11 @@
                     request.setRequestHeader('X-Auth-Token', token);
                 },
                 success: function(data) {
-
+                    $.each(data, function(i, field){
+                        images.push(new Image(field["url"],field["urlth"]));
+                    });
                     console.log(data);
+                    console.log(images);
                 },
                 error: function(result) {
                     console.log("Erreur de token");
@@ -82,6 +87,7 @@
                         token = result.value;
                         console.log(token);
                         console.log(result);
+                        getImages();
                         saveToken(token);
 
                     },
