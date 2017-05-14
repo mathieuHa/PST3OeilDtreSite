@@ -68,7 +68,7 @@ class DefaultController extends Controller
         if ($request->isMethod('POST') && $request->request->has('id')) {
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
-            if ($user->getApiId()==0){
+            //if ($user->getApiId()==0){
                 $user->setApiId($request->request->get('id'));
                 $em->persist($user);
                 $em->flush();
@@ -76,7 +76,7 @@ class DefaultController extends Controller
                     'status' => 'ok',
                     'api id' => 'ok'
                 ));
-            }
+            //}
         } else {
             throw new BadRequestHttpException('No token in request');
         }
