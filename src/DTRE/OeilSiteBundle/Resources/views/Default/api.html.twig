@@ -58,10 +58,34 @@
                     success: function (result) {
                         console.log("success");
                         console.log(result);
+                        id = result.id;
+                        saveIdApi(id);
+
                     },
                     error: function (result) {
                         console.log(result);
                         console.log("Erreur creation POST /users");
+                    }
+                });
+            }
+
+            function saveIdApi(id) {
+                $.ajax({
+                    url: "/oeil/api-id",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: id
+                    },
+                    success: function(result) {
+                        console.log(result);
+
+
+
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        console.log("Erreur sauve POST /oeil/api-id");
                     }
                 });
             }

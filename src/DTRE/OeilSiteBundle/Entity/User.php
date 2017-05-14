@@ -42,9 +42,17 @@ class User extends BaseUser
      */
     private $apiToken;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="apiId", type="integer", nullable=false)
+     */
+    private $apiId;
+
     public function __construct()
     {
         parent::__construct();
+        $this->apiId = 0;
     }
 
     public function getApiToken()
@@ -55,5 +63,29 @@ class User extends BaseUser
     public function setApiToken($apiToken)
     {
         $this->apiToken = $apiToken;
+    }
+
+    /**
+     * Set apiId
+     *
+     * @param integer $apiId
+     *
+     * @return User
+     */
+    public function setApiId($apiId)
+    {
+        $this->apiId = $apiId;
+
+        return $this;
+    }
+
+    /**
+     * Get apiId
+     *
+     * @return integer
+     */
+    public function getApiId()
+    {
+        return $this->apiId;
     }
 }

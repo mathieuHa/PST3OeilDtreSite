@@ -10,6 +10,10 @@ dtre_oeil_site_api_new_token:
     path:     /api-refresh-token
     defaults: { _controller: DTREOeilSiteBundle:Default:apitoken }
 
+dtre_oeil_site_api_id:
+    path:     /api-id
+    defaults: { _controller: DTREOeilSiteBundle:Default:apiId }
+
 dtre_oeil_site_graphique:
     path:     /graphics
     defaults: { _controller: DTREOeilSiteBundle:Default:graphics }
