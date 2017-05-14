@@ -74,6 +74,7 @@ class DefaultController extends Controller
                 $em->flush();
                 return new JsonResponse(array(
                     'status' => 'ok',
+                    'api id' => 'ok'
                 ));
             }
         } else {
