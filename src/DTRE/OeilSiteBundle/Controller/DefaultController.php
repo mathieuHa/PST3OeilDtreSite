@@ -35,7 +35,16 @@ class DefaultController extends Controller
 
     public function mediaAction()
     {
-        return $this->render('DTREOeilSiteBundle:Default:media.html.twig');
+        $user = $this->getUser();
+        $form = $this
+            ->get('form.factory')
+            ->create(UserType::class,$user);
+
+        return $this->render('DTREOeilSiteBundle:Default:media.html.twig', array(
+            'token'=>$user->getApiToken(),
+            'login'=>$user->getEmail(),
+            'form'=>$form->createView()
+        ));
     }
 
     public function apiAction(Request $request)
