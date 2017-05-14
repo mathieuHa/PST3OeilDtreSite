@@ -13,7 +13,7 @@
         <h1>Médias</h1>
     </div>
 
-    <div class="row">
+    <div class="row" id="container">
 
             <div class="col-md-3">
                 <img src="{{ img.urlth }}" width="100%" height="auto">
@@ -73,7 +73,17 @@
         function addPictures(images) {
             $.each(images, function(i, image){
                 console.log(image);
+                addPicture(image);
             });
+        }
+
+        function addPicture(image){
+            var cont = $("<div></div>").addClass("col-md-3");
+
+            var img = $("<img>");
+            img.attr("src",image.urlth);
+            cont.append(img);
+            $("#container").append(cont);
         }
 
         function newToken() {
