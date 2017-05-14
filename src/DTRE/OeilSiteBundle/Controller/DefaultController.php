@@ -20,7 +20,17 @@ class DefaultController extends Controller
 
     public function videoAction()
     {
-        return $this->render('DTREOeilSiteBundle:Default:video.html.twig');
+        $user = $this->getUser();
+        $form = $this
+            ->get('form.factory')
+            ->create(UserType::class,$user);
+
+        return $this->render('DTREOeilSiteBundle:Default:video.html.twig', array(
+            'token'=>$user->getApiToken(),
+            'login'=>$user->getEmail(),
+            'apiid'=>$user->getApiId(),
+            'form'=>$form->createView()
+        ));
     }
 
     public function mediaAction()

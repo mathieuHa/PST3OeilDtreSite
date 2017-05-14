@@ -64,6 +64,8 @@
         </div>
     </div>
 
+    {{ include("DTREOeilSiteBundle:Template:modal_connect.html.twig") }}
+
 {% endblock %}
 
 {% block bundle_javascript %}
@@ -71,6 +73,121 @@
     {{ parent() }}
     <script src="{{ asset('http://mathieuhanotaux.ddns.net:8080/socket.io/socket.io.js') }}"></script>
 
-    <script type="text/javascript" src="{{ asset('assets/js/video_control.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var token = "{{ token }}";
+            var login = "{{ login }}";
+            var apiid = "{{ apiid }}";
+
+            var socket = io.connect('http://mathieuhanotaux.ddns.net:8080');
+            socket.on('message', function(message) {
+                alert('Le serveur a un message pour vous : ' + message);
+            });
+
+            $('#left').click(function () {
+                socket.emit('left', 'LEFT');
+                alert('left');
+            });
+            $('#right').click(function () {
+                socket.emit('right', 'RIGHT');
+                alert('right');
+            });
+            $('#up').click(function () {
+                socket.emit('up', 'UP');
+                alert('top');
+            });
+            $('#down').click(function () {
+                socket.emit('down', 'DOWN');
+                alert('down');
+            });
+            $('#start_record').click(function () {
+                $.ajax({
+                    url: "https://oeildtapi.hanotaux.fr/api/media/images/shot?id="+apiId,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data) {
+
+                        console.log(data);
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
+            });
+            $('#stop_record').click(function () {
+                socket.emit('stop_record');
+            });
+            $('#picture').click(function () {
+                socket.emit('picture');
+            });
+            $('#center').click(function () {
+                socket.emit('center', 'CENTER');
+            });
+            $('#light-on').click(function () {
+                socket.emit('light-on', 'LIGHT-ON');
+            });
+            $('#light-off').click(function () {
+                socket.emit('light-off', 'LIGHT-OFF');
+            });
+            function newToken() {
+                $("#modalP").modal();
+                $("#save").on('click', (function (e) {
+                    pass = $('#dtre_oeilsitebundle_user_apiToken').val();
+                    console.log(pass);
+                    console.log("new token()");
+                    $.ajax({
+                        url: "https://oeildtapi.hanotaux.fr/api/auth-tokens",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            login: login,
+                            password: pass
+                        },
+                        success: function(result) {
+                            console.log(token);
+                            token = result.value;
+                            console.log(token);
+                            console.log(result);
+                            getSensorInformation(token);
+                            saveToken(token);
+
+                        },
+                        error: function(result) {
+                            console.log(result);
+                            console.log("Erreur autentification POST /auth-tokens");
+                        }
+                    });
+                    $("#modalP").modal('hide');
+                    return false;
+                }));
+
+            }
+            function saveToken(token) {
+                $.ajax({
+                    url: "/oeil/api-refresh-token",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        token: token
+                    },
+                    success: function(result) {
+                        console.log(result);
+
+
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        console.log("Erreur autentification POST /save-token");
+                    }
+                });
+            }
+        });
+    </script>
 
 {% endblock %}
