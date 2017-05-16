@@ -26,11 +26,164 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-1">
+                <h3 id="div_1"></h3>
+            </div>
+            <div class="col-md-1">
+                <h3 id="div_2"></h3>
+            </div>
+            <div class="col-md-1">
+                <h3 id="div_3"></h3>
+            </div>
+            <div class="col-md-1">
+                <h3 id="div_4"></h3>
+            </div>
+        </div>
+    </div>
 
+    {{ include("DTREOeilSiteBundle:Template:modal_connect.html.twig") }}
 
 {% endblock %}
 
 
 {% block bundle_javascript %}
     {{ parent() }}
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var token = "{{ token }}";
+        var login = "{{ login }}";
+
+        function Sensor(id, name, title, subtitle, location, data) {
+            this.id = id;
+            this.name = name;
+            this.title = title;
+            this.subtitle = subtitle;
+            this.location = location;
+            this.data = data;
+        }
+        var sensors = [];
+
+        function newToken() {
+            $("#modalP").modal();
+            $("#save").on('click', (function (e) {
+                pass = $('#dtre_oeilsitebundle_user_apiToken').val();
+                console.log(pass);
+                console.log("new token()");
+                $.ajax({
+                    url: "https://oeildtapi.hanotaux.fr/api/auth-tokens",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        login: login,
+                        password: pass
+                    },
+                    success: function(result) {
+                        console.log(token);
+                        token = result.value;
+                        console.log(token);
+                        console.log(result);
+                        getSensorInformation(token);
+                        saveToken(token);
+
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        console.log("Erreur autentification POST /auth-tokens");
+                    }
+                });
+                $("#modalP").modal('hide');
+                return false;
+            }));
+
+        }
+        function saveToken(token) {
+            $.ajax({
+                url: "/oeil/api-refresh-token",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    token: token
+                },
+                success: function(result) {
+                    console.log(result);
+
+
+                },
+                error: function(result) {
+                    console.log(result);
+                    console.log("Erreur autentification POST /save-token");
+                }
+            });
+        }
+
+        function getLastData(sensor) {
+
+            $.ajax({
+                url: "https://oeildtapi.hanotaux.fr/api/sensors/" +sensor.id+ "/data/now",
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader('X-Auth-Token', token);
+                },
+                success: function(data,result, o) {
+                    sensor.data = data;
+                    if(sensor.data.length != 0){
+                        console.log(sensor);
+                        $('#'+sensor.location).text(sensor.name + " : " +sensor.data.value)
+                    } else {
+                        console.log("erruer sensors vide");
+                    }
+
+                },
+                error: function(result) {
+                    console.log("Erreur de token");
+                    console.log(result);
+                }
+
+            });
+
+        }
+
+
+
+        function getSensorInformation(token) {
+            $.ajax({
+                url: "https://oeildtapi.hanotaux.fr/api/sensors",
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader('X-Auth-Token', token);
+                },
+                success: function(data,result, o) {
+                    console.log("Reussi");
+                    console.log("data");
+                    console.log(data);
+                    console.log("res");
+                    console.log(result);
+                    console.log("o");
+                    console.log(o);
+                    $.each(data, function(i, field){
+                        sensors.push(new Sensor(field["id"],field["name"],field["title"],field["subtitle"],"div_"+(i+1), null));
+                    });
+                    for (var j = 0; j < sensors.length; j++) {
+                        getLastData(sensors[j]);
+                    }
+                    console.log(sensors);
+                },
+                error: function(result) {
+                    console.log("Erreur de token");
+                    console.log(result);
+                    newToken();
+                }
+
+            });
+        }
+        getSensorInformation(token);
+    });
+</script>
 {% endblock %}

@@ -31,10 +31,12 @@
 
         getImages();
 
-        function Image(url, urlth, nom) {
+        function Image(url, urlth, nom, id, date) {
             this.url = url;
             this.urlth = urlth;
             this.nom = nom;
+            this.id = id;
+            this.date = date;
         }
 
         var select = "";
@@ -52,12 +54,12 @@
                 },
                 success: function(data) {
                     $.each(data, function(i, field){
-                        images.push(new Image(field["urlth"],field["url"],field["user"]["login"]));
+                        images.push(new Image(field["urlth"],field["url"],field["user"]["login"], field["id"], field["date"]));
                     });
                     console.log(data);
                     console.log(images);
 
-                    var cpt= 1000;
+                    var cpt= 500;
                     addPictures(images, cpt);
                 },
                 error: function(result) {
@@ -74,10 +76,21 @@
                 cpt+=100;
                 addPicture(image, cpt, i);
             });
+
+            $('.del').click(function () {
+                console.log("suppresion de l'image " +this.id);
+                var i_d = "bloc_"+this.id;
+                deleteImage(this.id);
+                console.log(i_d);
+                this.remove();
+            });
+
         }
 
+
+
         function addPicture(image, cpt, i){
-            var cont = $("<div></div>").addClass("col-lg-3").addClass("col-md-3").addClass("col-sm-4").addClass("col-xs-12");
+            var cont = $("<div></div>").addClass("col-lg-3").addClass("col-md-3").addClass("col-sm-4").addClass("col-xs-12").attr("id","bloc_"+image.id);
             var br = $("<br>");
             var lien =$("<a></a>");
             var br2 = $("<br>");
@@ -85,6 +98,8 @@
             var thum = $("<div></div>").addClass("thumbnail");
             var titre = $("<div></div>").addClass("caption");
             var nom = $("<h4></h4>").text(image.nom);
+            var date = $("<h6></h6>").text(image.date);
+            var del = $("<button></button>").addClass("btn btn-danger").addClass("del").attr("id",image.id).text("Supprimer");
             img.attr("src","https://oeildtmedia.hanotaux.fr/"+image.urlth);
             lien.attr("href","https://oeildtmedia.hanotaux.fr/"+image.url);
             lien.attr("target","_blank");
@@ -92,11 +107,34 @@
             img.attr("height","auto");
             img.attr("id",i);
             lien.append(img);
-            titre.append(nom);
+            titre.append(nom).append(date).append(del);
             thum.append(lien).append(titre);
             cont.append(thum);
             cont.append(br);
             cont.hide().appendTo($("#container")).fadeIn(cpt);
+        }
+
+
+        function deleteImage(id) {
+            $.ajax({
+                url: "https://oeildtapi.hanotaux.fr/api/media/image/"+id,
+                type: 'DELETE',
+                dataType: 'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader('X-Auth-Token', token);
+                },
+                success: function(data) {
+                    console.log(data);
+                    console.log("image deleted");
+                    getImages();
+                },
+                error: function(result) {
+                    console.log("Erreur de token");
+                    console.log(result);
+                    newToken();
+                }
+
+            });
         }
 
         function newToken() {

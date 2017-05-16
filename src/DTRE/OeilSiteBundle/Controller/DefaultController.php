@@ -15,7 +15,16 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('DTREOeilSiteBundle:Default:index.html.twig');
+        $user = $this->getUser();
+        $form = $this
+            ->get('form.factory')
+            ->create(UserType::class,$user);
+        return $this->render('DTREOeilSiteBundle:Default:index.html.twig', array(
+            'token'=>$user->getApiToken(),
+            'login'=>$user->getEmail(),
+            'apiid'=>$user->getApiId(),
+            'form'=>$form->createView()
+        ));
     }
 
     public function videoAction()

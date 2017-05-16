@@ -55,6 +55,13 @@
                             {% endimage %}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            {% image 'public/images/bas.png' %}
+                            <img src="{{ asset_url }}" alt="Example" id="center" width="96px" height="91px" />
+                            {% endimage %}
+                        </div>
+                    </div>
 
 
 
@@ -71,8 +78,6 @@
 {% block bundle_javascript %}
 
     {{ parent() }}
-    <script src="{{ asset('http://mathieuhanotaux.ddns.net:8080/socket.io/socket.io.js') }}"></script>
-
     <script type="text/javascript">
         $(document).ready(function(){
             var token = "{{ token }}";
@@ -82,27 +87,26 @@
             /*var socket = io.connect('http://mathieuhanotaux.ddns.net:8080');
             socket.on('message', function(message) {
                 alert('Le serveur a un message pour vous : ' + message);
-            });
+            });*/
 
             $('#left').click(function () {
-                socket.emit('left', 'LEFT');
-                alert('left');
+                turn ('g');
             });
             $('#right').click(function () {
-                socket.emit('right', 'RIGHT');
-                alert('right');
+                turn ('d');
             });
             $('#up').click(function () {
-                socket.emit('up', 'UP');
-                alert('top');
+                turn ('h');
             });
             $('#down').click(function () {
-                socket.emit('down', 'DOWN');
-                alert('down');
-            });*/
-            $('#start_record').click(function () {
+                turn ('b');
+            });
+            $('#center').click(function () {
+                turn ('c');
+            });
+            $('#picture').click(function () {
                 $.ajax({
-                    url: "https://oeildtapi.hanotaux.fr/api/media/images/shot?id="+apiId,
+                    url: "https://oeildtapi.hanotaux.fr/api/media/shot?id="+apiId,
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function(request) {
@@ -126,9 +130,7 @@
             $('#picture').click(function () {
                 socket.emit('picture');
             });
-            $('#center').click(function () {
-                socket.emit('center', 'CENTER');
-            });
+
             $('#light-on').click(function () {
                 socket.emit('light-on', 'LIGHT-ON');
             });
@@ -186,6 +188,27 @@
                     }
                 });
             }
+            function turn(direction) {
+                $.ajax({
+                    url: "https://oeildtapi.hanotaux.fr/api/control/servo?="+direction,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data) {
+                        console.log("turn "+direction);
+                        console.log(data);
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                        newToken();
+                    }
+
+                });
+            }
+
         });
     </script>
 
