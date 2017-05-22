@@ -190,7 +190,7 @@
             }
             function turn(direction) {
                 $.ajax({
-                    url: "https://oeildtapi.hanotaux.fr/api/control/servo?="+direction,
+                    url: "https://oeildtapi.hanotaux.fr/api/control/servo?dir="+direction,
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function(request) {
