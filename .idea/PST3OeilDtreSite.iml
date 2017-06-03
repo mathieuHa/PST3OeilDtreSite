@@ -49,5 +49,6 @@
     <orderEntry type="library" name="loader" level="application" />
     <orderEntry type="library" name="moment" level="application" />
     <orderEntry type="library" name="bootstrap-datetimepicker" level="application" />
+    <orderEntry type="library" name="socket.io-1.0.0" level="application" />
   </component>
 </module>

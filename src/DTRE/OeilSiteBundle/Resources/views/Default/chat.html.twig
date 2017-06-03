@@ -1,0 +1,139 @@
+
+
+
+
+{% extends "DTREOeilSiteBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} Chat
+{% endblock %}
+
+{% block bundle_body %}
+    <div class="page-header">
+        <h1>Chat</h1>
+    </div>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">Chat</h3>
+        </div>
+        <div class="panel-body">
+            <div style="height: 200px; overflow-y: auto" id="cont">
+
+            </div>
+            {{ include("DTREOeilSiteBundle:Template:message.html.twig") }}
+        </div>
+    </div>
+
+
+
+    {{ include("DTREOeilSiteBundle:Template:modal_connect.html.twig") }}
+
+{% endblock %}
+
+{% block bundle_javascript %}
+
+    {{ parent() }}
+
+    <script src="{{ asset('https://oeildtcam.hanotaux.fr:8080/socket.io/socket.io.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var token = "{{ token }}";
+
+            var apiId = "{{ apiid }}";
+
+            var socket = io.connect('https://oeildtcam.hanotaux.fr:8080');
+            socket.on('message', function(message) {
+                alert('Le serveur a un message pour vous : ' + message);
+            });
+
+
+            /*$('#stop_record').click(function () {
+                socket.emit('stop_record');
+            });
+            */
+
+            getListMessages();
+            function newToken() {
+                $("#modalP").modal();
+                $("#save").on('click', (function (e) {
+                    pass = $('#dtre_oeilsitebundle_user_apiToken').val();
+                    console.log(pass);
+                    console.log("new token()");
+                    $.ajax({
+                        url: "https://oeildtapi.hanotaux.fr/api/auth-tokens",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            login: login,
+                            password: pass
+                        },
+                        success: function(result) {
+                            console.log(token);
+                            token = result.value;
+                            console.log(token);
+                            console.log(result);
+                            saveToken(token);
+
+                        },
+                        error: function(result) {
+                            console.log(result);
+                            console.log("Erreur autentification POST /auth-tokens");
+                        }
+                    });
+                    $("#modalP").modal('hide');
+                    return false;
+                }));
+
+            }
+            function getListMessages() {
+                $.ajax({
+                    url: "https://oeildtapi.hanotaux.fr/api/chat/messages",
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader('X-Auth-Token', token);
+                    },
+                    success: function(data,result, o) {
+                        console.log(result,data);
+                        initMessages(data);
+
+                    },
+                    error: function(result) {
+                        console.log("Erreur de token");
+                        console.log(result);
+                    }
+
+                });
+            }
+            
+            function initMessages(messages) {
+                $.each(messages, function(i, field){
+                    var cont = $("<div></div>").attr("id","bloc_"+field["id"]);
+                    var p = $("<p></p>").text(field["text"]);
+                    cont.append(p);
+                    $("#cont").append(cont);
+                });
+            }
+            function saveToken(token) {
+                $.ajax({
+                    url: "/oeil/api-refresh-token",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        token: token
+                    },
+                    success: function(result) {
+                        console.log(result);
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        console.log("Erreur autentification POST /save-token");
+                    }
+                });
+            }
+
+        });
+    </script>
+
+{% endblock %}

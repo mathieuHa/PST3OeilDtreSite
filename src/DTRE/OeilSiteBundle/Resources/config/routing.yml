@@ -22,6 +22,10 @@ dtre_oeil_site_video:
     path:     /video
     defaults: { _controller: DTREOeilSiteBundle:Default:video }
 
+dtre_oeil_site_chat:
+    path:     /chat
+    defaults: { _controller: DTREOeilSiteBundle:Default:chat }
+
 dtre_oeil_site_media:
     path:     /media
     defaults: { _controller: DTREOeilSiteBundle:Default:media }

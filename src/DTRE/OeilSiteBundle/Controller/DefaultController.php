@@ -27,6 +27,20 @@ class DefaultController extends Controller
         ));
     }
 
+    public function chatAction()
+    {
+        $user = $this->getUser();
+        $form = $this
+            ->get('form.factory')
+            ->create(UserType::class,$user);
+        return $this->render('DTREOeilSiteBundle:Default:chat.html.twig', array(
+            'token'=>$user->getApiToken(),
+            'login'=>$user->getEmail(),
+            'apiid'=>$user->getApiId(),
+            'form'=>$form->createView()
+        ));
+    }
+
     public function videoAction()
     {
         $user = $this->getUser();
