@@ -1,0 +1,73 @@
+
+    function scrollToBottom() {
+        $('#cont').animate({ scrollTop: $('#cont').prop('scrollHeight')}, 1000);
+    }
+    var socket = io.connect('https://oeildtcam.hanotaux.fr:8080');
+    socket.on('message', function(data) {
+        //console.log(data);
+        var msg = JSON.parse(data);
+        var cont = $("<div></div>");
+        var p = $("<p></p>").text(msg.autor+" : "+msg.msg);
+        cont.append(p);
+        $("#cont").append(cont);
+        scrollToBottom();
+    });
+
+
+    socket.emit('petit_nouveau', "{{ app.user.username }}");
+    $("#send_msg").click(function (e) {
+        e.preventDefault();
+        var msg = $("#message");
+
+        var cont = $("<div></div>").attr("id","bloc_"+apiId);
+        var p = $("<p></p>").text("{{ app.user.username }}"+ ":" + msg.val());
+        cont.append(p);
+        $("#cont").append(cont);
+
+        var mdg = {};
+        mdg.autor="{{ app.user.username }}";
+        mdg.msg=msg.val();
+        mdg.id=apiId;
+        mdg.token=token;
+        mdg.color="#000000";
+        socket.emit('message',JSON.stringify(mdg));
+        msg.val('');
+        scrollToBottom();
+        return false;
+    });
+
+
+
+
+    getListMessages();
+
+    function getListMessages() {
+        $.ajax({
+            url: "https://oeildtapi.hanotaux.fr/api/chat/messages",
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function(request) {
+                request.setRequestHeader('X-Auth-Token', token);
+            },
+            success: function(data,result, o) {
+                //console.log(result,data);
+                initMessages(data);
+
+            },
+            error: function(result) {
+                //console.log("Erreur de token");
+                //console.log(result);
+            }
+
+        });
+    }
+
+    function initMessages(messages) {
+        $.each(messages, function(i, field){
+            var cont = $("<div></div>").attr("id","bloc_"+field["id"]);
+            var p = $("<p></p>").text(field["user"]["login"]+" : "+field["text"]);
+            cont.append(p);
+            $("#cont").append(cont);
+        });
+        scrollToBottom();
+    }
